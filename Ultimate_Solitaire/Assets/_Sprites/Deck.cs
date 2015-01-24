@@ -261,6 +261,19 @@ public class Deck : MonoBehaviour {
 				card.pipGOs.Add (tGO);
 			}
 
+			// face cards
+			if (card.def.face != ""){
+				tGO = Instantiate(prefabSprite) as GameObject;
+				tSR = tGO.GetComponent<SpriteRenderer>();
+				// gen the right name and pass to get face()
+				tS = GetFace(card.def.face+card.suit);
+				tSR.sprite = tS;
+				tSR.sortingOrder=1;
+				tGO.transform.parent = card.transform;
+				tGO.transform.localPosition = Vector3.zero;
+				tGO.name = "face";
+			}
+
 
 
 
@@ -269,7 +282,20 @@ public class Deck : MonoBehaviour {
 			cards.Add (card);
 		}
 	}
+	// find proper face sprite
+	public Sprite GetFace(string faceS){
 
+		foreach (Sprite tS in faceSprites) {
+			//print (tS.name + " " + faceS);
+			// if it has correct name 
+			if (tS.name == faceS){
+
+				return (tS);
+			}
+
+		}
+		return (null);
+	}
 
 
 	// Use this for initialization
