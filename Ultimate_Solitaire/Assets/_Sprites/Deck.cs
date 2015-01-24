@@ -31,6 +31,7 @@ public class Deck : MonoBehaviour {
 
 
 		//read decorators for all cards
+		decorators = new List<Decorator> ();
 	}
 
 
