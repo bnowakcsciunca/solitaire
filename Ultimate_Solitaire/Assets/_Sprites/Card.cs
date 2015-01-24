@@ -17,6 +17,15 @@ public class Card : MonoBehaviour {
 
 	public CardDefinition def; // parsed from DeckXML.xml
 
+	public bool faceUp{
+		get {
+			return (!back.activeSelf);
+		}
+		set{
+			back.SetActive(!value);
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 	

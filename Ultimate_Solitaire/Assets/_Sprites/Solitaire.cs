@@ -16,6 +16,7 @@ public class Solitaire : MonoBehaviour {
 	void Start () {
 		deck = GetComponent<Deck> ();
 		deck.InitDeck (deckXML.text);
+		Deck.Shuffle (ref deck.cards); // shuffles deck
 	
 	}
 	

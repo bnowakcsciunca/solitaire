@@ -177,8 +177,8 @@ public class Deck : MonoBehaviour {
 			cgo.transform.parent = deckAnchor;
 			Card card = cgo.GetComponent<Card>();
 
-			// junk line
-			cgo.transform.localPosition = new Vector3((i%13)*3, i/13*4,0);
+			// This line is for debug purposes as it displays all the cards
+			//cgo.transform.localPosition = new Vector3((i%13)*3, i/13*4,0);
 
 			// assign basic values to card
 			card.name = cardNames[i];
@@ -274,6 +274,23 @@ public class Deck : MonoBehaviour {
 				tGO.name = "face";
 			}
 
+			// add card back
+			// back covers everything on card
+			tGO = Instantiate(prefabSprite) as GameObject;
+			tSR = tGO.GetComponent<SpriteRenderer>();
+			tSR.sprite=cardBack;
+			tGO.transform.parent = card.transform;
+			tGO.transform.localPosition = Vector3.zero;
+			// give it higher sort order then anything else
+			tSR.sortingOrder = 2;
+			tGO.name = "back";
+			card.back = tGO;
+
+			// face up is default
+
+			card.faceUp = true;
+
+
 
 
 
@@ -306,5 +323,23 @@ public class Deck : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	static public void Shuffle(ref List<Card>oCards){
+		// create a temp list to hold new order
+		List<Card> tCards = new List<Card> ();
+
+		int ndx; // this will hold the index of the card to be moved
+		tCards = new List<Card>();// init temp list
+		// repeat as long as there are cards in original list
+		while (oCards.Count > 0) {
+			// pick random card
+			ndx = Random.Range(0,oCards.Count);
+			// add that card to temp list
+			tCards.Add (oCards[ndx]);
+			// remove from orijinal list
+			oCards.RemoveAt(ndx);
+		}
+		// replace original list with temp list
+		oCards = tCards;
 	}
 }
