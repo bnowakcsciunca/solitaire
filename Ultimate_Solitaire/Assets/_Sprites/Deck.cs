@@ -3,6 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
+	// suits
+	public Sprite suitClub;
+	public Sprite suitDiamond;
+	public Sprite suitHeart;
+	public Sprite suitSpade;
+
+	public Sprite[] faceSprites;
+	public Sprite[] rankSprites;
+
+	public Sprite cardBack;
+	public Sprite cardBackGold;
+	public Sprite cardFront;
+	public Sprite cardFrontGold;
+
+	// prefabs
+	public GameObject prefabSprite;
+	public GameObject prefabCard;
+
+
+
 	public bool ________________;
 	public PT_XMLReader xmlr;
 	public List<string> cardNames;
@@ -10,11 +30,26 @@ public class Deck : MonoBehaviour {
 	public List<Decorator> decorators;
 	public List<CardDefinition> cardDefs;
 	public Transform deckAnchor;
-	public Dictionary<string,Sprite> dictSprites;
+	public Dictionary<string,Sprite> dictSuits;
 
 	// init deck called by solitare when it is ready
 	public void InitDeck(string deckXMLText){
+		// this creates an anchor for card gameobjects in the hiarachy
+		if (GameObject.Find ("deck") == null) {
+			GameObject anchorGO = new GameObject("deck");
+			deckAnchor = anchorGO.transform;
+		}
+		// initalize dictionary of suit sprites
+		dictSuits = new Dictionary<string,Sprite> (){
+			{"C" , suitClub},
+			{"D" , suitDiamond},
+			{"H",suitHeart},
+			{"S",suitSpade}
+
+		};
+
 		ReadDeck (deckXMLText);
+		MakeCards ();
 	}
 	// this parses the xml file
 	public void ReadDeck(string deckXMLText){
@@ -101,6 +136,137 @@ public class Deck : MonoBehaviour {
 				
 		
 		
+		}
+	}
+	// get proper card definition based on rank (1 -14) Ace to King
+	public CardDefinition GetCardDefinitionByRank(int rnk){
+		// search through all card defintions 
+		foreach (CardDefinition cd in cardDefs) {
+			// if rank is correct return this definition
+			if (cd.rank == rnk){
+				return(cd);
+			}
+		}
+		return(null);
+	
+	}
+
+	// make card Game Objects
+	public void MakeCards(){
+		// card names will be names of cards to build
+		// each suit goes from 1 to 13
+		cardNames = new List<string>();
+		string[] letters = new string[]{"C","D","H","S"};
+		foreach (string s in letters) {
+			for (int i = 0 ; i<13; i++){
+				cardNames.Add(s + (i+1));
+			}
+		}
+		// make list to hold all the cards
+		cards = new List<Card> ();
+		// several varibles are reused several times
+		Sprite tS = null;
+		GameObject tGO = null;
+		SpriteRenderer tSR = null;
+
+		// itterate thru all cards just created
+		for (int i = 0; i < cardNames.Count; i++){
+			// create new card game object
+			GameObject cgo = Instantiate (prefabCard) as GameObject;
+			// set transform.parent to anchor
+			cgo.transform.parent = deckAnchor;
+			Card card = cgo.GetComponent<Card>();
+
+			// junk line
+			cgo.transform.localPosition = new Vector3((i%13)*3, i/13*4,0);
+
+			// assign basic values to card
+			card.name = cardNames[i];
+			card.suit = card.name[0].ToString();
+			card.rank = int.Parse(card.name.Substring(1));
+			if (card.suit == "D" || card.suit == "H"){
+				card.colS = "Red";
+				card.color = Color.red;
+			}
+			// pull card def for this card
+			card.def = GetCardDefinitionByRank(card.rank);
+
+			// add decorators
+			foreach(Decorator deco in decorators){
+				if (deco.type == "suit"){
+					// instanciate a game object
+					tGO = Instantiate(prefabSprite) as GameObject;
+					// get sprite renderer
+					tSR=tGO.GetComponent<SpriteRenderer>();
+					// set to proper suit
+					tSR.sprite = dictSuits[card.suit];
+				}else{
+					tGO= Instantiate(prefabSprite) as GameObject;
+					tSR = tGO.GetComponent<SpriteRenderer>();
+					// get proper sprite for this rank
+					tS = rankSprites[card.rank];
+					// assign to sprite renderer
+					tSR.sprite = tS;
+					// set color to match suit
+					tSR.color = card.color;
+
+
+				}
+				// make deco sprites render above card
+				tSR.sortingOrder= 1;
+				// make decorator sprite a child of card
+				tGO.transform.parent = cgo.transform;
+				// set local pos based on loc from DeckXML
+				tGO.transform.localPosition = deco.loc;
+				// flip if needed
+				if (deco.flip){
+					tGO.transform.rotation = Quaternion.Euler(0,0,180);
+				}
+				// set scale
+				if (deco.scale != 1){
+					tGO.transform.localScale= Vector3.one * deco.scale;
+				}
+				// name it so it's easy to find
+				tGO.name = deco.type;
+				// add to list
+				card.decoGOs.Add(tGO);
+			}
+			// add pips
+			foreach(Decorator pip in card.def.pips){
+				// instantiate a sprite
+				tGO = Instantiate(prefabSprite) as GameObject;
+				// set parent to game object
+				tGO.transform.parent = cgo.transform;
+				// set position as specified in the xml
+				tGO.transform.localPosition = pip.loc;
+				// flip if needed
+				if (pip.flip){
+					tGO.transform.rotation = Quaternion.Euler(0,0,180);
+
+				}
+				// scale if nessicary, only for ace
+				if (pip.scale != 1){
+					tGO.transform.localScale = Vector3.one * pip.scale;
+				}
+
+				// give a name
+				tGO.name = "pip";
+				// get sprite renderer
+				tSR = tGO.GetComponent<SpriteRenderer>();
+				// set to proper suit
+				tSR.sprite = dictSuits[card.suit];
+				// set sort order so sprite is rendered above front
+				tSR.sortingOrder = 1;
+				// add to list of pips
+				card.pipGOs.Add (tGO);
+			}
+
+
+
+
+
+
+			cards.Add (card);
 		}
 	}
 

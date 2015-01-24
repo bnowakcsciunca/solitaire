@@ -4,6 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Card : MonoBehaviour {
+	public string suit; // ( C D H or S)
+	public int rank; // value 1 - 14
+	public Color color = Color.black;
+	public string colS = "Black";
+	// this list holds all the decorators
+	public List<GameObject> decoGOs = new List<GameObject>();
+	// this list holds all the pips
+	public List<GameObject> pipGOs = new List<GameObject>();
+
+	public GameObject back;  // the back of the card
+
+	public CardDefinition def; // parsed from DeckXML.xml
 
 	// Use this for initialization
 	void Start () {
