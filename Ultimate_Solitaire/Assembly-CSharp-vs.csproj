@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Ultimate_Solitaire.cs" />
      <Compile Include="Assets\_Sprites\Card.cs" />
      <Compile Include="Assets\_Sprites\Deck.cs" />
      <Compile Include="Assets\_Sprites\Solitaire.cs" />
