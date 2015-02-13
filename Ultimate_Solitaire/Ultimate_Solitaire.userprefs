@@ -1,8 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Sprites\Deck.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Splash.cs">
     <Files>
-      <File FileName="Assets\_Sprites\Deck.cs" Line="339" Column="32" />
+      <File FileName="Assets\__Scripts\Splash.cs" Line="8" Column="1" />
+      <File FileName="Assets\__Scripts\Start_Screen.cs" Line="12" Column="3" />
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="16" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

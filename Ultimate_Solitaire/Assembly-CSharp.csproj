@@ -46,11 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Ultimate_Solitaire.cs" />
      <Compile Include="Assets\_Sprites\Card.cs" />
      <Compile Include="Assets\_Sprites\Deck.cs" />
      <Compile Include="Assets\_Sprites\Solitaire.cs" />
      <Compile Include="Assets\__Scripts\PT_XMLReader.cs" />
+     <Compile Include="Assets\__Scripts\Splash.cs" />
+     <Compile Include="Assets\__Scripts\Start_Screen.cs" />
+     <Compile Include="Assets\__Scripts\Ultimate_Solitaire.cs" />
      <Compile Include="Assets\__Scripts\Utils.cs" />
      <None Include="Assets\Resources\DeckXML.xml" />
      <None Include="Assets\Resources\LayoutXML.xml" />
