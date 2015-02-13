@@ -49,10 +49,10 @@
      <Compile Include="Assets\_Sprites\Card.cs" />
      <Compile Include="Assets\_Sprites\Deck.cs" />
      <Compile Include="Assets\_Sprites\Solitaire.cs" />
-     <Compile Include="Assets\__Scripts\End_Screen.cs" />
      <Compile Include="Assets\__Scripts\PT_XMLReader.cs" />
-     <Compile Include="Assets\__Scripts\Splash.cs" />
-     <Compile Include="Assets\__Scripts\Start_Screen.cs" />
+     <Compile Include="Assets\__Scripts\UI\End_Screen.cs" />
+     <Compile Include="Assets\__Scripts\UI\Splash.cs" />
+     <Compile Include="Assets\__Scripts\UI\Start_Screen.cs" />
      <Compile Include="Assets\__Scripts\Ultimate_Solitaire.cs" />
      <Compile Include="Assets\__Scripts\Utils.cs" />
      <None Include="Assets\Resources\DeckXML.xml" />
