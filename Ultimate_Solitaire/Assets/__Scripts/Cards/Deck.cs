@@ -178,7 +178,7 @@ public class Deck : MonoBehaviour {
 			Card card = cgo.GetComponent<Card>();
 
 			// This line is for debug purposes as it displays all the cards
-			cgo.transform.localPosition = new Vector3((i%13)*3, i/13*4,0);
+			//cgo.transform.localPosition = new Vector3((i%13)*3, i/13*4,0);
 
 			// assign basic values to card
 			card.name = cardNames[i];
