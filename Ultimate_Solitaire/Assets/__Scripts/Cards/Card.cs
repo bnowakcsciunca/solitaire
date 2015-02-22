@@ -2,6 +2,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+public enum CardState{
+	drawpile,
+	tableau,
+	target,
+	discard
+}
 
 public class Card : MonoBehaviour {
 	public string suit; // ( C D H or S)
@@ -12,8 +18,12 @@ public class Card : MonoBehaviour {
 	public List<GameObject> decoGOs = new List<GameObject>();
 	// this list holds all the pips
 	public List<GameObject> pipGOs = new List<GameObject>();
-
+	public SpriteRenderer[] spriteRenderers;
 	public GameObject back;  // the back of the card
+	public CardState state = CardState.drawpile;
+	public List<Card> hiddenBy = new List<Card>();
+	public int layoutID;
+	public SlotDef slotDef;
 
 	public CardDefinition def; // parsed from DeckXML.xml
 
@@ -35,7 +45,53 @@ public class Card : MonoBehaviour {
 	void Update () {
 	
 	}
+	public void SetSortingLayerName(string tSLN){
+		PopulateSpriteRenderers ();
+		foreach (SpriteRenderer tSR in spriteRenderers) {
+			tSR.sortingLayerName = tSLN;
+			
+			
+			
+		}
+		
+	}
+
+	public void PopulateSpriteRenderers(){
+		if (spriteRenderers == null || spriteRenderers.Length == 0) {
+			spriteRenderers = GetComponentsInChildren<SpriteRenderer>();	
+		}
+	}
+	
+	public void SetSortOrder(int sOrd){
+		PopulateSpriteRenderers ();
+		
+		
+		foreach (SpriteRenderer tSR in spriteRenderers) {
+			if (tSR.gameObject == this.gameObject){
+				tSR.sortingOrder = sOrd;
+				continue;
+			}
+			switch(tSR.gameObject.name){
+			case "back":
+				tSR.sortingOrder = sOrd+2;
+				break;
+			case "face":
+			default: tSR.sortingOrder = sOrd+1;
+				break;
+			}
+		}
+		
+	}
+	
+	
+
 }
+
+
+
+
+
+
 [System.Serializable]
 public class Decorator{
 
@@ -50,6 +106,8 @@ public class CardDefinition{
 	public string   face; //used for face card
 	public int      rank; // a number 1-13
 	public List<Decorator> pips = new List<Decorator> (); //pips used
+
+
 
 
 
