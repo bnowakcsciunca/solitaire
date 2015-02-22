@@ -57,6 +57,7 @@
      <Compile Include="Assets\__Scripts\Utils.cs" />
      <None Include="Assets\Resources\DeckXML.xml" />
      <None Include="Assets\Resources\LayoutXML.xml" />
+     <None Include="Assets\Resources\LayoutXML_Alt.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
