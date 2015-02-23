@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Deck.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\UI\End_Screen.cs">
     <Files>
-      <File FileName="Assets\__Scripts\Cards\Deck.cs" Line="181" Column="6" />
+      <File FileName="Assets\__Scripts\UI\End_Screen.cs" Line="41" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
