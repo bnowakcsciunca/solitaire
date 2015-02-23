@@ -36,6 +36,29 @@ public class Card : MonoBehaviour {
 		}
 	}
 
+	void OnMouseEnter(){
+		Ultimate_Solitaire.S.hover = true;
+		//print (this.name);
+		
+	}
+
+	void OnMouseExit(){
+		Ultimate_Solitaire.S.hover = false;
+	}
+
+	void OnMouseDown(){
+		Ultimate_Solitaire.S.clicked = true;
+		Ultimate_Solitaire.S.clickedCard = this;
+		Ultimate_Solitaire.S.pos = this.transform.position;
+
+		}
+	void OnMouseUp(){
+		Ultimate_Solitaire.S.clicked = false;
+		this.transform.position = Ultimate_Solitaire.S.pos;
+		Ultimate_Solitaire.S.clickedCard = null;
+
+	}
+
 	// Use this for initialization
 	void Start () {
 	
@@ -112,3 +135,4 @@ public class CardDefinition{
 
 
 }
+

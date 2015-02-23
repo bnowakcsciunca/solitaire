@@ -13,6 +13,8 @@ public class SlotDef{
 	public List<int> hiddenBy = new List<int>();
 	public string type = "slot";
 	public Vector2 stagger;
+	public int TableauNum;
+
 }
 
 public class Layout : MonoBehaviour {
@@ -46,20 +48,24 @@ public class Layout : MonoBehaviour {
 			tSD.x = float.Parse(slotsX[i].att ("x"));
 			tSD.y = float.Parse(slotsX[i].att ("y"));
 			tSD.layerID = int.Parse(slotsX[i].att ("layer"));
+
 			// convert layer num into text
 //			print (tSD.layerID);
 			tSD.layerName = sortingLayerNames[tSD.layerID];
 
 			switch(tSD.type){
 			case "slot":
+				tSD.TableauNum = int.Parse(slotsX[i].att ("tableau"));
 				tSD.faceUp = (slotsX[i].att ("faceup") == "1");
 				tSD.id = int.Parse (slotsX[i].att ("id"));
+
 				if (slotsX[i].HasAtt("hiddenby")){
 					string [] hiding = slotsX[i].att ("hiddenby").Split(',');
 					foreach(string s in hiding){
 						tSD.hiddenBy.Add (int.Parse (s));
 					}
 				}
+
 				slotDefs.Add(tSD);
 				break;
 			case "drawpile":

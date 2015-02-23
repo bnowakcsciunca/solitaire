@@ -6,7 +6,12 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	static public Ultimate_Solitaire S;
 	public Deck deck;
 	public TextAsset deckXML;
-
+	Vector3 mousePos2D;
+	Vector3 mousePos3D;
+	public bool clicked = false;
+	public bool hover = false;
+	public Card  clickedCard;
+	public Vector3 pos;
 
 
 	
@@ -19,7 +24,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Transform layoutAnchor;
 	
 
-	public List<Card> tableau;
+	public List<Card>[] tableaus = new List<Card>[7];
 	public List<Card> discardPile;
 	void Awake(){
 		
@@ -35,11 +40,21 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		layout.ReadLayout (layoutXML.text);
 		drawPile = (deck.cards);
 		LayoutGame ();
+		print(tableaus[1].Count);
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		mousePos2D = Input.mousePosition;
+		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
+		mousePos3D.z++;
+		if (clicked = true&& clickedCard != null&& clickedCard.state == CardState.tableau && clickedCard.faceUp == true) {
+			clickedCard.transform.position = mousePos3D;
+			print (mousePos3D);
+
+				
+		}
 		
 	}
 	void UpdateDrawPile(){
@@ -71,6 +86,9 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			layoutAnchor.transform.position=layoutCenter;
 		}
 		Card cp;
+		for (int i = 0 ; i < tableaus.Length; i++)
+			tableaus[i] = new List<Card>();
+
 		foreach (SlotDef tSD in layout.slotDefs) {
 			cp = Draw ();
 			cp.faceUp = tSD.faceUp;
@@ -80,8 +98,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			cp.slotDef = tSD;
 			cp.state=CardState.tableau;
 			cp.SetSortingLayerName(tSD.layerName);
-			
-			tableau.Add (cp);
+			int temp = cp.slotDef.TableauNum;
+			tableaus[temp].Add (cp);
 			
 			
 		}
