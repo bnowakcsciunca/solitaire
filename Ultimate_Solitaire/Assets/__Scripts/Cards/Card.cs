@@ -24,6 +24,7 @@ public class Card : MonoBehaviour {
 	public List<Card> hiddenBy = new List<Card>();
 	public int layoutID;
 	public SlotDef slotDef;
+	bool drawn = false;
 
 	public CardDefinition def; // parsed from DeckXML.xml
 
@@ -37,6 +38,12 @@ public class Card : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
+		if (this.state == CardState.tableau) {
+			print ("tableau");	
+		}
+		if (this.state == CardState.drawpile) {
+			print ("DECK");	
+		}
 		Ultimate_Solitaire.S.hover = true;
 		//print (this.name);
 		
@@ -46,16 +53,53 @@ public class Card : MonoBehaviour {
 		Ultimate_Solitaire.S.hover = false;
 	}
 
+	void OnTriggerEnter(Collider col){
+	//	print ("DERP");
+	}
+
 	void OnMouseDown(){
-		Ultimate_Solitaire.S.clicked = true;
-		Ultimate_Solitaire.S.clickedCard = this;
-		Ultimate_Solitaire.S.pos = this.transform.position;
+		if (this.state == CardState.tableau) {
+				
+			Ultimate_Solitaire.S.clicked = true;
+			Ultimate_Solitaire.S.clickedCard = this;
+			Ultimate_Solitaire.S.pos = this.transform.position;
+			}
+		if (this.state == CardState.discard) {
+			Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();
+			Ultimate_Solitaire.S.tp = tem[tem.Length-1];
+			Ultimate_Solitaire.S.clicked = true;
+			Ultimate_Solitaire.S.clickedCard = Ultimate_Solitaire.S.tp;
+			if (Ultimate_Solitaire.S.pos == Vector3.zero)
+			Ultimate_Solitaire.S.pos = Ultimate_Solitaire.S.tp.transform.position;
+		}
+		 if (this.state == CardState.drawpile&& this.faceUp == false) {
+			Card tem = Ultimate_Solitaire.S.DrawCall();
+			Ultimate_Solitaire.S.discardPile.Add(tem);
+			tem.state = CardState.discard;
+			tem.faceUp = true;
+			tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
+			tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
+			                                          Ultimate_Solitaire.S.layout.discardPile.y,
+			                                          .05f);
+			tem.SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
+			drawn = true;
 
 		}
+	}
 	void OnMouseUp(){
-		Ultimate_Solitaire.S.clicked = false;
-		this.transform.position = Ultimate_Solitaire.S.pos;
-		Ultimate_Solitaire.S.clickedCard = null;
+		if (drawn == false) {
+				
+			Ultimate_Solitaire.S.clicked = false;
+			if (this.state == CardState.tableau)
+			this.transform.position = Ultimate_Solitaire.S.pos;
+			if (this.state == CardState.discard){
+				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
+
+			}
+			Ultimate_Solitaire.S.clickedCard = null;
+			Ultimate_Solitaire.S.pos = Vector3.zero;
+		}
+		drawn = false;
 
 	}
 

@@ -12,6 +12,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public bool hover = false;
 	public Card  clickedCard;
 	public Vector3 pos;
+	public Card tp; // temp card for moving discard cards
 
 
 	
@@ -40,18 +41,20 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		layout.ReadLayout (layoutXML.text);
 		drawPile = (deck.cards);
 		LayoutGame ();
-		print(tableaus[1].Count);
+		//print(tableaus[1].Count);
 		
 	}
+	public Card DrawCall(){
+		return Draw();}
 	
 	// Update is called once per frame
 	void Update () {
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
-		if (clicked = true&& clickedCard != null&& clickedCard.state == CardState.tableau && clickedCard.faceUp == true) {
+		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
-			print (mousePos3D);
+			//print (mousePos3D);
 
 				
 		}
