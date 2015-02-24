@@ -25,6 +25,8 @@ public class Card : MonoBehaviour {
 	public int layoutID;
 	public SlotDef slotDef;
 	bool drawn = false;
+	bool valid = false;
+
 
 	public CardDefinition def; // parsed from DeckXML.xml
 
@@ -54,6 +56,15 @@ public class Card : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider col){
+		Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
+		if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
+			print (Ultimate_Solitaire.S.tempCard.name);
+			 valid = Ultimate_Solitaire.S.CheckValid(Ultimate_Solitaire.S.clickedCard,Ultimate_Solitaire.S.tempCard);
+				print (valid);
+				
+		}
+
+
 	//	print ("DERP");
 	}
 

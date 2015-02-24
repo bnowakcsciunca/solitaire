@@ -10,9 +10,10 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	Vector3 mousePos3D;
 	public bool clicked = false;
 	public bool hover = false;
-	public Card  clickedCard;
+	public Card  clickedCard;// the card being moved
 	public Vector3 pos;
 	public Card tp; // temp card for moving discard cards
+	public Card tempCard; // a slot for the other card in a movement action
 
 
 	
@@ -80,6 +81,16 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		Card cd = drawPile [0];
 		drawPile.RemoveAt (0);
 		return(cd);
+	}
+
+	public bool CheckValid(Card clicked, Card collided){
+		if (clicked.rank == collided.rank - 1 && clicked.colS != collided.colS) {
+			//print ("DERP");
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	void LayoutGame(){
