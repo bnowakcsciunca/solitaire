@@ -1,4 +1,4 @@
-﻿// script controlling the game layout
+﻿// script controlling the game layout, much of it is from the book
 using UnityEngine;
 using System.Collections; 
 using System.Collections.Generic;
@@ -55,7 +55,7 @@ public class Layout : MonoBehaviour {
 
 			switch(tSD.type){
 			case "slot":
-				tSD.TableauNum = int.Parse(slotsX[i].att ("tableau"));
+				tSD.TableauNum = int.Parse(slotsX[i].att ("tableau"));// this determines which tableau pile this slot is a part of
 				tSD.faceUp = (slotsX[i].att ("faceup") == "1");
 				tSD.id = int.Parse (slotsX[i].att ("id"));
 
