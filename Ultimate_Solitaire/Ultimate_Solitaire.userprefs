@@ -1,8 +1,19 @@
 ﻿<Properties>
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\UI\End_Screen.cs">
     <Files>
       <File FileName="Assets\__Scripts\UI\End_Screen.cs" Line="41" Column="26" />
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Ultimate_Solitaire.cs">
+    <Files>
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="65" Column="78" />
+      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="1" Column="35" />
+      <File FileName="Assets\Resources\LayoutXML.xml" Line="66" Column="32" />
+      <File FileName="Assets\__Scripts\Layout.cs" Line="1" Column="39" />
+      <File FileName="c:\Users\Brendan\Google Drive\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs" Line="1" Column="1" />
+>>>>>>> origin/TEST
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
