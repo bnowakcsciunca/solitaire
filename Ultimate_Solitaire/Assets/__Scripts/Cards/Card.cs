@@ -1,4 +1,4 @@
-﻿//much of this code  is from the textbook prospector chapter 
+﻿// code from textbook prospector chapter recoded for this project
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +24,8 @@ public class Card : MonoBehaviour {
 	public List<Card> hiddenBy = new List<Card>();
 	public int layoutID;
 	public SlotDef slotDef;
-	bool drawn = false;// was a card just removed from the deck?
-	bool valid = false; // is theis a valid move
+	bool drawn = false;
+	bool valid = false;
 
 
 	public CardDefinition def; // parsed from DeckXML.xml
@@ -40,12 +40,12 @@ public class Card : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
-		//if (this.state == CardState.tableau) {
-		//	print ("tableau");	
-		//}
-		//if (this.state == CardState.drawpile) {
-		//	print ("DECK");	
-	//	}
+		if (this.state == CardState.tableau) {
+			print ("tableau");	
+		}
+		if (this.state == CardState.drawpile) {
+			print ("DECK");	
+		}
 		Ultimate_Solitaire.S.hover = true;
 		//print (this.name);
 		
@@ -55,7 +55,7 @@ public class Card : MonoBehaviour {
 		Ultimate_Solitaire.S.hover = false;
 	}
 
-	void OnTriggerEnter(Collider col){// right now this only tells you if a move is invalid
+	void OnTriggerEnter(Collider col){
 		Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
 		if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
 			print (Ultimate_Solitaire.S.tempCard.name);
@@ -73,44 +73,42 @@ public class Card : MonoBehaviour {
 				
 			Ultimate_Solitaire.S.clicked = true;
 			Ultimate_Solitaire.S.clickedCard = this;
-			Ultimate_Solitaire.S.pos = this.transform.position;// save current position in case of invalid move
+			Ultimate_Solitaire.S.pos = this.transform.position;
 			}
 		if (this.state == CardState.discard) {
 			Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();
-			//these lines are to pick up the card from the top of the waste
-			//because it is actually for some reason on the bottom of the linked list a bit of clever manipulation is needed
 			Ultimate_Solitaire.S.tp = tem[tem.Length-1];
 			Ultimate_Solitaire.S.clicked = true;
 			Ultimate_Solitaire.S.clickedCard = Ultimate_Solitaire.S.tp;
 			if (Ultimate_Solitaire.S.pos == Vector3.zero)
 			Ultimate_Solitaire.S.pos = Ultimate_Solitaire.S.tp.transform.position;
 		}
-		 if (this.state == CardState.drawpile&& this.faceUp == false) {// move card from deck to waste
-			Card tem = Ultimate_Solitaire.S.DrawCall();// this is done this way b/c of some crap about non static contexts
-			Ultimate_Solitaire.S.discardPile.Add(tem); // add it to discard
-			tem.state = CardState.discard;// change it's state
-			tem.faceUp = true; // turn it face up
+		 if (this.state == CardState.drawpile&& this.faceUp == false) {
+			Card tem = Ultimate_Solitaire.S.DrawCall();
+			Ultimate_Solitaire.S.discardPile.Add(tem);
+			tem.state = CardState.discard;
+			tem.faceUp = true;
 			tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
 			tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
 			                                          Ultimate_Solitaire.S.layout.discardPile.y,
 			                                          .05f);
-			tem.SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);// bring this card to fron to discard pile
+			tem.SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 			drawn = true;
 
 		}
 	}
 	void OnMouseUp(){
-		if (drawn == false) {// this avoids issues with the act of drawing a card (they would act strange without this test
+		if (drawn == false) {
 				
-			Ultimate_Solitaire.S.clicked = false;// resed clicked
+			Ultimate_Solitaire.S.clicked = false;
 			if (this.state == CardState.tableau)
-			this.transform.position = Ultimate_Solitaire.S.pos;// return card to it's original position
+			this.transform.position = Ultimate_Solitaire.S.pos;
 			if (this.state == CardState.discard){
-				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos; // return to original position
+				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
 
 			}
-			Ultimate_Solitaire.S.clickedCard = null;// reset
-			Ultimate_Solitaire.S.pos = Vector3.zero;// reset
+			Ultimate_Solitaire.S.clickedCard = null;
+			Ultimate_Solitaire.S.pos = Vector3.zero;
 		}
 		drawn = false;
 

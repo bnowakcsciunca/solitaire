@@ -8,10 +8,10 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public TextAsset deckXML;
 	Vector3 mousePos2D;
 	Vector3 mousePos3D;
-	public bool clicked = false; // true when card is clicked
-	public bool hover = false; // true when mouse is over card
+	public bool clicked = false;
+	public bool hover = false;
 	public Card  clickedCard;// the card being moved
-	public Vector3 pos;// clicked card's original position 
+	public Vector3 pos;
 	public Card tp; // temp card for moving discard cards
 	public Card tempCard; // a slot for the other card in a movement action
 
@@ -26,7 +26,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Transform layoutAnchor;
 	
 
-	public List<Card>[] tableaus = new List<Card>[7];// the linked list of tableaus
+	public List<Card>[] tableaus = new List<Card>[7];
 	public List<Card> discardPile;
 	void Awake(){
 		
@@ -45,15 +45,14 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		//print(tableaus[1].Count);
 		
 	}
-	public Card DrawCall(){// a method to call draw to avoid issues with calling methods from non static context (workaround getter method)
+	public Card DrawCall(){
 		return Draw();}
 	
 	// Update is called once per frame
 	void Update () {
-		mousePos2D = Input.mousePosition; // get pointer position
-		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D); //Screen to world space
+		mousePos2D = Input.mousePosition;
+		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
-		// next lines basicly move the card if the conditions provided are true
 		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
 			//print (mousePos3D);
@@ -62,7 +61,6 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		}
 		
 	}
-	//everything below here was copied from prospetor ((with slight modifcations to layoutGame()------------------------------
 	void UpdateDrawPile(){
 		Card cd;
 		for (int i = 0; i<drawPile.Count; i++) {
@@ -101,7 +99,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			layoutAnchor = tGO.transform;
 			layoutAnchor.transform.position=layoutCenter;
 		}
-		Card cp;// this is an addition 
+		Card cp;
 		for (int i = 0 ; i < tableaus.Length; i++)
 			tableaus[i] = new List<Card>();
 
@@ -114,8 +112,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			cp.slotDef = tSD;
 			cp.state=CardState.tableau;
 			cp.SetSortingLayerName(tSD.layerName);
-			int temp = cp.slotDef.TableauNum;// get tableau number from slotdef
-			tableaus[temp].Add (cp);// add the card to it's proper tableau
+			int temp = cp.slotDef.TableauNum;
+			tableaus[temp].Add (cp);
 			
 			
 		}

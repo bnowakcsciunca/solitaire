@@ -18,10 +18,14 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 <<<<<<< HEAD
+<<<<<<< HEAD
 																																																						GlobalSection(MonoDevelopProperties) = preSolution
 =======
 																																																																															GlobalSection(MonoDevelopProperties) = preSolution
 >>>>>>> origin/TEST
+=======
+																																																																													GlobalSection(MonoDevelopProperties) = preSolution
+>>>>>>> parent of 4391d8f... Added comments to much of the code
 =======
 																																												GlobalSection(MonoDevelopProperties) = preSolution
 >>>>>>> origin/master

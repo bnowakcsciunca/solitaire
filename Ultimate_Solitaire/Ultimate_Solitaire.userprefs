@@ -1,5 +1,6 @@
 ﻿<Properties>
 <<<<<<< HEAD
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\UI\End_Screen.cs">
     <Files>
@@ -7,11 +8,15 @@
 =======
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Ultimate_Solitaire.cs">
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
+>>>>>>> parent of 4391d8f... Added comments to much of the code
     <Files>
-      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="65" Column="78" />
-      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="1" Column="35" />
-      <File FileName="Assets\Resources\LayoutXML.xml" Line="66" Column="32" />
-      <File FileName="Assets\__Scripts\Layout.cs" Line="1" Column="39" />
+      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="65" Column="4" />
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="88" Column="6" />
+      <File FileName="Assets\Resources\LayoutXML.xml" Line="1" Column="1" />
+      <File FileName="Assets\__Scripts\Layout.cs" Line="1" Column="1" />
       <File FileName="c:\Users\Brendan\Google Drive\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs" Line="1" Column="1" />
 >>>>>>> origin/TEST
     </Files>
