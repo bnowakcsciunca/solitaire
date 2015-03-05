@@ -1,6 +1,7 @@
 ﻿<Properties>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\UI\End_Screen.cs">
     <Files>
@@ -8,6 +9,10 @@
 =======
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Ultimate_Solitaire.cs">
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
+>>>>>>> parent of 4391d8f... Added comments to much of the code
 =======
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
