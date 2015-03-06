@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
 public enum CardState{
 	drawpile,
 	tableau,
@@ -27,6 +28,8 @@ public class Card : MonoBehaviour {
 	bool drawn = false;
 	bool valid = false;
 
+	public string prevSortingLayer;		// Stores the previous sorting layer so that we can return the card to it if necessary
+
 
 	public CardDefinition def; // parsed from DeckXML.xml
 
@@ -47,6 +50,9 @@ public class Card : MonoBehaviour {
 			print ("DECK");	
 		}
 		Ultimate_Solitaire.S.hover = true;
+
+
+
 		//print (this.name);
 		
 	}
@@ -70,10 +76,14 @@ public class Card : MonoBehaviour {
 
 	void OnMouseDown(){
 		if (this.state == CardState.tableau) {
-				
 			Ultimate_Solitaire.S.clicked = true;
 			Ultimate_Solitaire.S.clickedCard = this;
 			Ultimate_Solitaire.S.pos = this.transform.position;
+
+			// Change Layer to be above other cards
+			// prevSortingLayer = this.Set
+			prevSortingLayer = GetSortingLayerName();
+			this.SetSortingLayerName("MovingCard");
 			}
 		if (this.state == CardState.discard) {
 			Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();
@@ -84,6 +94,10 @@ public class Card : MonoBehaviour {
 			Ultimate_Solitaire.S.pos = Ultimate_Solitaire.S.tp.transform.position;
 		}
 		 if (this.state == CardState.drawpile&& this.faceUp == false) {
+			// Here I think we should check if the card has children and if so, move the entire pile
+
+
+
 			Card tem = Ultimate_Solitaire.S.DrawCall();
 			Ultimate_Solitaire.S.discardPile.Add(tem);
 			tem.state = CardState.discard;
@@ -98,8 +112,11 @@ public class Card : MonoBehaviour {
 		}
 	}
 	void OnMouseUp(){
+
 		if (drawn == false) {
-				
+			// Return to original sorting layer
+			this.SetSortingLayerName(prevSortingLayer);
+
 			Ultimate_Solitaire.S.clicked = false;
 			if (this.state == CardState.tableau)
 			this.transform.position = Ultimate_Solitaire.S.pos;
@@ -114,22 +131,18 @@ public class Card : MonoBehaviour {
 
 	}
 
-	// Use this for initialization
-	void Start () {
-	
+	// Grab the current sorting layer name
+	public string GetSortingLayerName() {
+		foreach (SpriteRenderer tSR in spriteRenderers) {
+			return (tSR.sortingLayerName);		
+		}
+		return null;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 	public void SetSortingLayerName(string tSLN){
 		PopulateSpriteRenderers ();
 		foreach (SpriteRenderer tSR in spriteRenderers) {
-			tSR.sortingLayerName = tSLN;
-			
-			
-			
+			tSR.sortingLayerName = tSLN;		
 		}
 		
 	}
@@ -142,8 +155,6 @@ public class Card : MonoBehaviour {
 	
 	public void SetSortOrder(int sOrd){
 		PopulateSpriteRenderers ();
-		
-		
 		foreach (SpriteRenderer tSR in spriteRenderers) {
 			if (tSR.gameObject == this.gameObject){
 				tSR.sortingOrder = sOrd;
@@ -165,11 +176,6 @@ public class Card : MonoBehaviour {
 
 }
 
-
-
-
-
-
 [System.Serializable]
 public class Decorator{
 
@@ -184,10 +190,5 @@ public class CardDefinition{
 	public string   face; //used for face card
 	public int      rank; // a number 1-13
 	public List<Decorator> pips = new List<Decorator> (); //pips used
-
-
-
-
-
 }
 

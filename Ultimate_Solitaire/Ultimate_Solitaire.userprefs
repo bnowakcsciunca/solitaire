@@ -1,29 +1,10 @@
 ﻿<Properties>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\UI\End_Screen.cs">
-    <Files>
-      <File FileName="Assets\__Scripts\UI\End_Screen.cs" Line="41" Column="26" />
-=======
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Ultimate_Solitaire.cs">
-=======
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
->>>>>>> parent of 4391d8f... Added comments to much of the code
-=======
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
->>>>>>> parent of 4391d8f... Added comments to much of the code
     <Files>
-      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="65" Column="4" />
-      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="88" Column="6" />
-      <File FileName="Assets\Resources\LayoutXML.xml" Line="1" Column="1" />
-      <File FileName="Assets\__Scripts\Layout.cs" Line="1" Column="1" />
-      <File FileName="c:\Users\Brendan\Google Drive\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs" Line="1" Column="1" />
->>>>>>> origin/TEST
+      <File FileName="..\..\..\TestProject\Assets\Test.cs" Line="19" Column="1" />
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="56" Column="36" />
+      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="117" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

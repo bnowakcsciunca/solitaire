@@ -4,30 +4,33 @@ using System.Collections.Generic;
 
 public class Ultimate_Solitaire : MonoBehaviour {
 	static public Ultimate_Solitaire S;
+
+	// DECK REFERENCE AND PILE LISTS
 	public Deck deck;
-	public TextAsset deckXML;
-	Vector3 mousePos2D;
-	Vector3 mousePos3D;
-	public bool clicked = false;
-	public bool hover = false;
-	public Card  clickedCard;// the card being moved
-	public Vector3 pos;
-	public Card tp; // temp card for moving discard cards
-	public Card tempCard; // a slot for the other card in a movement action
+	public List<Card> 	drawPile;
+	public List<Card> 	discardPile;
+	public List<Card>[] tableaus = new List<Card>[7];
 
-
+	// CARD REFERENCES
+	public Card  		clickedCard;// the card being moved
+	public Card 		tp; 		// temp card for moving discard cards
+	public Card 		tempCard; 	// a slot for the other card in a movement action
 	
+	Vector3 			mousePos2D;
+	Vector3 			mousePos3D;
+	public Vector3 		pos;
+	public bool 		clicked = false;
+	public bool 		hover = false;
+
+	// LAYOUT INFORMATION
 	public Layout layout;
+	public TextAsset 	deckXML;
 	public TextAsset layoutXML;
-	public List<Card> drawPile;
 	public Vector3 layoutCenter;
 	public float xOffset = 3;
 	public float yOffset = 2.5f;
 	public Transform layoutAnchor;
-	
 
-	public List<Card>[] tableaus = new List<Card>[7];
-	public List<Card> discardPile;
 	void Awake(){
 		
 		S = this;
@@ -50,14 +53,12 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// Move a card or stack of cards 
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
 		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
-			//print (mousePos3D);
-
-				
 		}
 		
 	}
