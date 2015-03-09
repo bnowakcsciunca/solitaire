@@ -1,10 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\Card.cs">
     <Files>
-      <File FileName="..\..\..\TestProject\Assets\Test.cs" Line="19" Column="1" />
-      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="56" Column="36" />
-      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="117" Column="39" />
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="1" Column="1" />
+      <File FileName="Assets\__Scripts\Cards\Card.cs" Line="87" Column="42" />
+      <File FileName="c:\Users\Brendan\Google Drive\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs" Line="70" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

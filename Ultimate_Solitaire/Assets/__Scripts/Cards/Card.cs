@@ -67,11 +67,28 @@ public class Card : MonoBehaviour {
 			print (Ultimate_Solitaire.S.tempCard.name);
 			 valid = Ultimate_Solitaire.S.CheckValid(Ultimate_Solitaire.S.clickedCard,Ultimate_Solitaire.S.tempCard);
 				print (valid);
+			if (valid == true){
+				MoveCard(Ultimate_Solitaire.S.clickedCard,Ultimate_Solitaire.S.tempCard); 
+			}
 				
 		}
 
 
 	//	print ("DERP");
+	}
+
+	void MoveCard(Card clickedcard, Card otherCard){
+		Ultimate_Solitaire.S.pos = otherCard.transform.position;
+		Ultimate_Solitaire.S.pos.z -= 1;
+		Ultimate_Solitaire.S.pos.y -= .5f;
+		print (Ultimate_Solitaire.S.pos);
+		if (clickedcard.state == CardState.discard) {
+			Ultimate_Solitaire.S.discardPile.Remove(clickedcard);	
+			clickedcard.state = CardState.tableau;
+		}
+
+
+
 	}
 
 	void OnMouseDown(){
@@ -115,6 +132,7 @@ public class Card : MonoBehaviour {
 
 		if (drawn == false) {
 			// Return to original sorting layer
+			if (valid == false)
 			this.SetSortingLayerName(prevSortingLayer);
 
 			Ultimate_Solitaire.S.clicked = false;
@@ -125,9 +143,11 @@ public class Card : MonoBehaviour {
 
 			}
 			Ultimate_Solitaire.S.clickedCard = null;
+			Ultimate_Solitaire.S.tempCard = null;
 			Ultimate_Solitaire.S.pos = Vector3.zero;
 		}
 		drawn = false;
+		valid = false;
 
 	}
 
