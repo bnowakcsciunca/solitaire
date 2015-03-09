@@ -78,26 +78,28 @@ public class Card : MonoBehaviour {
 	}
 
 	void MoveCard(Card clickedcard, Card otherCard){
-		Ultimate_Solitaire.S.pos = otherCard.transform.position;
-		Ultimate_Solitaire.S.pos.z -= 1;
-		Ultimate_Solitaire.S.pos.y -= .5f;
-		print (Ultimate_Solitaire.S.pos);
-		if (clickedcard.state == CardState.discard) {
-			Ultimate_Solitaire.S.discardPile.Remove(clickedcard);	
-			clickedcard.state = CardState.tableau;
-			int tableaunumb = otherCard.slotDef.TableauNum;
-			Ultimate_Solitaire.S.tableaus[tableaunumb].Add (clickedcard);
-		}
-		if (clickedcard.state == CardState.tableau) {
-			int tabl1 = clickedcard.slotDef.TableauNum;
-			int tabl2 = otherCard.slotDef.TableauNum;
-			print (Ultimate_Solitaire.S.tableaus[tabl2].Count);
-			Ultimate_Solitaire.S.tableaus[tabl1].Remove(clickedcard);
-			Ultimate_Solitaire.S.tableaus[tabl2].Add(clickedcard);
-			print (Ultimate_Solitaire.S.tableaus[tabl2].Count);
-		}
+		if(otherCard.state== CardState.tableau){
 
+				Ultimate_Solitaire.S.pos = otherCard.transform.position;
+				Ultimate_Solitaire.S.pos.z -= 1;
+				Ultimate_Solitaire.S.pos.y -= .5f;
+				print (Ultimate_Solitaire.S.pos);
+				if (clickedcard.state == CardState.discard) {
+						Ultimate_Solitaire.S.discardPile.Remove (clickedcard);	
+						clickedcard.state = CardState.tableau;
+						int tableaunumb = otherCard.slotDef.TableauNum;
+						Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
+				}
+				if (clickedcard.state == CardState.tableau) {
+						int tabl1 = clickedcard.slotDef.TableauNum;
+						int tabl2 = otherCard.slotDef.TableauNum;
+						print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+						Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
+						Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard);
+						print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+				}
 
+		}
 
 
 	}
