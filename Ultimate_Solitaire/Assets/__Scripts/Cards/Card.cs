@@ -93,10 +93,17 @@ public class Card : MonoBehaviour {
 				if (clickedcard.state == CardState.tableau) {
 						int tabl1 = clickedcard.slotDef.TableauNum;
 						int tabl2 = otherCard.slotDef.TableauNum;
-						print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
-						Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
-						Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard);
-						print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+				//print (tabl1);
+				//print(tabl2);
+
+						if (tabl1 != tabl2){
+					
+							//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+							Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
+							Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard);
+					clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
+						}	
+						//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
 				}
 
 		}
