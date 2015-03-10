@@ -43,7 +43,7 @@ public class Utils : MonoBehaviour {
 			// Expand b to contain the Collider's Bounds
 			b = BoundsUnion(b, go.collider.bounds);
 		}
-		// Iterate through each child of this gameObject.transform
+		// Iterate through each child of this gameObject.transform     
 		foreach( Transform t in go.transform ) {
 			// Expand b to contain their Bounds as well
 			b = BoundsUnion( b, CombineBoundsOfChildren( t.gameObject ) );

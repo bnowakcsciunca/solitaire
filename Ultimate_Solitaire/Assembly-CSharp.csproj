@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Foundation.cs" />
     <Compile Include="Assets\__Scripts\Cards\Card.cs" />
     <Compile Include="Assets\__Scripts\Cards\Deck.cs" />
     <Compile Include="Assets\__Scripts\Cards\Solitaire.cs" />

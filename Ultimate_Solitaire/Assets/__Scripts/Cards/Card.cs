@@ -7,7 +7,8 @@ public enum CardState{
 	drawpile,
 	tableau,
 	target,
-	discard
+	discard,
+	foundation
 }
 
 public class Card : MonoBehaviour {
@@ -27,6 +28,8 @@ public class Card : MonoBehaviour {
 	public SlotDef slotDef;
 	bool drawn = false;
 	bool valid = false;
+	bool fMove = false;
+	bool disableFon = false;// this prevents setting two foundations to the same suit
 
 	public string prevSortingLayer;		// Stores the previous sorting layer so that we can return the card to it if necessary
 
@@ -62,19 +65,56 @@ public class Card : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider col){
-		Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
-		if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
-			print (Ultimate_Solitaire.S.tempCard.name);
-			 valid = Ultimate_Solitaire.S.CheckValid(Ultimate_Solitaire.S.clickedCard,Ultimate_Solitaire.S.tempCard);
-				print (valid);
-			if (valid == true){
-				MoveCard(Ultimate_Solitaire.S.clickedCard,Ultimate_Solitaire.S.tempCard); 
-			}
+		if (col.name == "Foundation") {
+			//Ultimate_Solitaire.S.clickedCard = this;
+						//print ("fff");	
+			MoveToFoundation(Ultimate_Solitaire.S.clickedCard,col.GetComponent<Foundation>());
+				} else {
+						Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
+						if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
+								print (Ultimate_Solitaire.S.tempCard.name);
+								valid = Ultimate_Solitaire.S.CheckValid (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
+								print (valid);
+								if (valid == true) {
+										MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard); 
+								}
 				
-		}
+						}
 
-
+				}
 	//	print ("DERP");
+	}
+
+
+
+	void MoveToFoundation(Card clickedC,Foundation fon){
+
+				if (disableFon == false){
+				if (clickedC.rank == fon.curRank + 1) {
+						//print ("YYYY");
+
+			
+						if (fon.suit == "none" || fon.suit == clickedC.suit) {
+								Vector3 transfer = fon.transform.position;
+								transfer.z -= 1;
+								Ultimate_Solitaire.S.pos = transfer;
+								//print (Ultimate_Solitaire.S.pos);
+								fon.curRank = clickedC.rank;
+								fon.suit = clickedC.suit;
+								int tem = clickedC.slotDef.TableauNum;
+								if (clickedC.state == CardState.tableau)
+										Ultimate_Solitaire.S.tableaus [tem].Remove (clickedC);
+								if (clickedC.state == CardState.discard)
+										Ultimate_Solitaire.S.discardPile.Remove (clickedC);
+								fon.pile.Add (clickedC);
+								print (fon.pile.Count);
+								clickedC.SetSortOrder (100 * fon.pile.Count);
+								fMove = true;
+					disableFon = true;
+
+						}
+				}
+		}
 	}
 
 	void MoveCard(Card clickedcard, Card otherCard){
@@ -90,7 +130,7 @@ public class Card : MonoBehaviour {
 						clickedcard.state = CardState.tableau;
 						int tableaunumb = otherCard.slotDef.TableauNum;
 						Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
-						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
+//						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
 				//tem[tem.Length-1].SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 				}
 				if (clickedcard.state == CardState.tableau) {
@@ -182,12 +222,17 @@ public class Card : MonoBehaviour {
 				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
 
 			}
+			if (fMove == true)
+				Ultimate_Solitaire.S.clickedCard.state= CardState.foundation;
 			Ultimate_Solitaire.S.clickedCard = null;
 			Ultimate_Solitaire.S.tempCard = null;
 			Ultimate_Solitaire.S.pos = Vector3.zero;
+
 		}
 		drawn = false;
 		valid = false;
+		fMove = false;
+		disableFon = false;
 
 	}
 
