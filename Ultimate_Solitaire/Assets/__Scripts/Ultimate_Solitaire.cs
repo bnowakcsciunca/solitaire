@@ -76,6 +76,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			
 			cd.SetSortingLayerName(layout.drawPile.layerName);
 			cd.SetSortOrder(-10*i);
+
 		}
 	}
 	Card Draw(){

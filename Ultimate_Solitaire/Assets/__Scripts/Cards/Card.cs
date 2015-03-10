@@ -83,12 +83,15 @@ public class Card : MonoBehaviour {
 				Ultimate_Solitaire.S.pos = otherCard.transform.position;
 				Ultimate_Solitaire.S.pos.z -= 1;
 				Ultimate_Solitaire.S.pos.y -= .5f;
-				print (Ultimate_Solitaire.S.pos);
+
+				//print (Ultimate_Solitaire.S.pos); 
 				if (clickedcard.state == CardState.discard) {
 						Ultimate_Solitaire.S.discardPile.Remove (clickedcard);	
 						clickedcard.state = CardState.tableau;
 						int tableaunumb = otherCard.slotDef.TableauNum;
 						Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
+						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
+				//tem[tem.Length-1].SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 				}
 				if (clickedcard.state == CardState.tableau) {
 						int tabl1 = clickedcard.slotDef.TableauNum;
@@ -101,9 +104,11 @@ public class Card : MonoBehaviour {
 							//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
 							Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
 							Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard);
+							
 					clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
+					clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);
 						}	
-						//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+						//print (Ultimate_Solitaire.S.tableaus [tabl2].Count); 
 				}
 
 		}
@@ -120,9 +125,14 @@ public class Card : MonoBehaviour {
 			// Change Layer to be above other cards
 			// prevSortingLayer = this.Set
 			prevSortingLayer = GetSortingLayerName();
+			//print ("derrr");
 			this.SetSortingLayerName("MovingCard");
+
 			}
 		if (this.state == CardState.discard) {
+			prevSortingLayer = GetSortingLayerName();
+			//print ("derrr");
+			this.SetSortingLayerName("MovingCard");
 			Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();
 			Ultimate_Solitaire.S.tp = tem[tem.Length-1];
 			Ultimate_Solitaire.S.clicked = true;
@@ -146,6 +156,16 @@ public class Card : MonoBehaviour {
 			tem.SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 			drawn = true;
 
+		}
+		if (this.state == CardState.tableau && this.faceUp == false) {
+			int tem = this.slotDef.TableauNum;
+			Card[] x = Ultimate_Solitaire.S.tableaus[tem].ToArray();
+			for (int i = 0;i <x.Length;i++){
+				if (x[i].name == this.name&&i == x.Length-1){
+					this.faceUp=true;
+
+				}
+			}
 		}
 	}
 	void OnMouseUp(){

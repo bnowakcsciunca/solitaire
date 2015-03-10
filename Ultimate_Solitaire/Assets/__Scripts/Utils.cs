@@ -55,7 +55,7 @@ public class Utils : MonoBehaviour {
 	// Make a static read-only public property camBounds
 	static public Bounds camBounds {
 		get {
-			// if _camBounds hasn't been set yet
+			// if _camBounds hasn't been set yet 
 			if (_camBounds.size == Vector3.zero) {
 				// SetCameraBounds using the default Camera
 				SetCameraBounds();
