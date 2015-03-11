@@ -9,6 +9,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Deck deck;
 	public List<Card> 	drawPile;
 	public List<Card> 	discardPile;
+	[SerializeField]
 	public List<Card>[] tableaus = new List<Card>[7];
 
 	// CARD REFERENCES
@@ -53,6 +54,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//print (tableaus [0].Count);
 		// Move a card or stack of cards 
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);

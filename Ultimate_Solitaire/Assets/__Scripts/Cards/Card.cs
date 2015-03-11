@@ -65,11 +65,22 @@ public class Card : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider col){
-		if (col.name == "Foundation") {
+		//print (col.name);
+		if (col.tag == "Empty" && this.rank == 13) { 
+			if(col.GetComponent<TableauAnc>().pactive== true){ 
+			print ("empty");
+				MoveToEmpty(Ultimate_Solitaire.S.clickedCard,col.GetComponent<TableauAnc>()); 
+			}	
+		}
+
+
+		else if (col.name == "Foundation") {
 			//Ultimate_Solitaire.S.clickedCard = this;
 						//print ("fff");	
 			MoveToFoundation(Ultimate_Solitaire.S.clickedCard,col.GetComponent<Foundation>());
 				} else {
+						if (col.tag != "Empty"){
+
 						Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
 						if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
 								print (Ultimate_Solitaire.S.tempCard.name);
@@ -77,12 +88,34 @@ public class Card : MonoBehaviour {
 								print (valid);
 								if (valid == true) {
 										MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard); 
-								}
+								} 
 				
 						}
-
+			}
 				}
 	//	print ("DERP");
+	}
+
+	void MoveToEmpty(Card king,TableauAnc anc){
+		Ultimate_Solitaire.S.pos = anc.transform.position;
+		Ultimate_Solitaire.S.pos.z -= 2;
+		if (king.state == CardState.discard) {
+			Ultimate_Solitaire.S.discardPile.Remove(king);
+			king.state= CardState.tableau;
+			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
+			king.slotDef.TableauNum = anc.pileID;
+			print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count); 
+
+		}
+		if (king.state == CardState.tableau) {
+			int temp = king.slotDef.TableauNum;	
+			Ultimate_Solitaire.S.tableaus[temp].Remove(king);
+			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
+			king.slotDef.TableauNum = anc.pileID;
+			print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count);
+		}
+
+	
 	}
 
 
@@ -105,7 +138,7 @@ public class Card : MonoBehaviour {
 								if (clickedC.state == CardState.tableau)
 										Ultimate_Solitaire.S.tableaus [tem].Remove (clickedC);
 								if (clickedC.state == CardState.discard)
-										Ultimate_Solitaire.S.discardPile.Remove (clickedC);
+										Ultimate_Solitaire.S.discardPile.Remove (clickedC); 
 								fon.pile.Add (clickedC);
 								print (fon.pile.Count);
 								clickedC.SetSortOrder (100 * fon.pile.Count);
@@ -123,6 +156,7 @@ public class Card : MonoBehaviour {
 				Ultimate_Solitaire.S.pos = otherCard.transform.position;
 				Ultimate_Solitaire.S.pos.z -= 1;
 				Ultimate_Solitaire.S.pos.y -= .5f;
+			bool passThrough = false;
 
 				//print (Ultimate_Solitaire.S.pos); 
 				if (clickedcard.state == CardState.discard) {
@@ -130,10 +164,11 @@ public class Card : MonoBehaviour {
 						clickedcard.state = CardState.tableau;
 						int tableaunumb = otherCard.slotDef.TableauNum;
 						Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
+				passThrough = true;
 //						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
 				//tem[tem.Length-1].SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 				}
-				if (clickedcard.state == CardState.tableau) {
+				else if (clickedcard.state == CardState.tableau && passThrough == false) {
 						int tabl1 = clickedcard.slotDef.TableauNum;
 						int tabl2 = otherCard.slotDef.TableauNum;
 				//print (tabl1);
@@ -143,7 +178,7 @@ public class Card : MonoBehaviour {
 					
 							//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
 							Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
-							Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard);
+							Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
 							
 					clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
 					clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);
