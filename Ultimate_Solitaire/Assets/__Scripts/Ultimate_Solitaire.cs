@@ -13,9 +13,9 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public List<Card>[] tableaus = new List<Card>[7];
 
 	// CARD REFERENCES
-	public Card  		clickedCard;	// the card being moved
-	public Card 		tp; 			// temp card for moving discard cards
-	public Card 		tempCard; 		// a slot for the other card in a movement action
+	public Card  		clickedCard;// the card being moved
+	public Card 		tp; 		// temp card for moving discard cards
+	public Card 		tempCard; 	// a slot for the other card in a movement action       
 	
 	Vector3 			mousePos2D;
 	Vector3 			mousePos3D;
@@ -23,8 +23,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public bool 		clicked = false;
 	public bool 		hover = false;
 	public bool 		multi = false;
-	public Card[] 		multiMov;
-
+	public Card[] multiMov;
 	// LAYOUT INFORMATION
 	public 				Layout layout;
 	public 				TextAsset 	deckXML;
@@ -51,26 +50,21 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		//print(tableaus[1].Count);
 		
 	}
-
 	public Card DrawCall(){
-		return Draw();
-	}
+		return Draw();}
 	
 	// Update is called once per frame
 	void Update () {
-
-		// Move a card or stack of cards
+		//print (tableaus [0].Count);
+		// Move a card or stack of cards 
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
-
-		// If a card is clicked and is face-up either in the tableau or the discard pile, move it
-		if (clicked = true && clickedCard != null && (clickedCard.state == CardState.foundation || clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
+		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
 		}
 		
 	}
-
 	void UpdateDrawPile(){
 		Card cd;
 		for (int i = 0; i<drawPile.Count; i++) {
@@ -125,7 +119,15 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			cp.SetSortingLayerName(tSD.layerName);
 			int temp = cp.slotDef.TableauNum;
 			tableaus[temp].Add (cp);
+			
+			
 		}
+
+
+
+		
 		UpdateDrawPile ();
 	}
+
+
 }
