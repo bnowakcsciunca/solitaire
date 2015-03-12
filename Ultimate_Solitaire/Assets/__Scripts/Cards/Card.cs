@@ -151,7 +151,7 @@ public class Card : MonoBehaviour {
 	}
 
 	void MoveCard(Card clickedcard, Card otherCard){
-		if(otherCard.state== CardState.tableau){
+		if(otherCard.state== CardState.tableau&&Ultimate_Solitaire.S.multi == false){
 
 				Ultimate_Solitaire.S.pos = otherCard.transform.position;
 				Ultimate_Solitaire.S.pos.z -= 1;
@@ -169,10 +169,10 @@ public class Card : MonoBehaviour {
 //						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
 				//tem[tem.Length-1].SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
 				}
-				else if (clickedcard.state == CardState.tableau && passThrough == false) {
+			else if (clickedcard.state == CardState.tableau && passThrough == false && Ultimate_Solitaire.S.multi == false) {
 						int tabl1 = clickedcard.slotDef.TableauNum;
 						int tabl2 = otherCard.slotDef.TableauNum;
-				//print (tabl1);
+				//print (tabl1); &&
 				//print(tabl2);
 
 						if (tabl1 != tabl2){
@@ -186,6 +186,38 @@ public class Card : MonoBehaviour {
 						}	
 						//print (Ultimate_Solitaire.S.tableaus [tabl2].Count); 
 				}
+
+
+		}
+		if (clickedcard.state == CardState.tableau && Ultimate_Solitaire.S.multi == true) {
+			Ultimate_Solitaire.S.pos = otherCard.transform.position;
+			Ultimate_Solitaire.S.pos.z -= 1;
+			Ultimate_Solitaire.S.pos.y -= .5f;
+			int tabl1 = clickedcard.slotDef.TableauNum;
+			int tabl2 = otherCard.slotDef.TableauNum;
+			if (tabl1 != tabl2){
+				
+				//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
+				Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
+				Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
+				
+				clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
+				clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
+			}	
+			Vector3 tpos = Ultimate_Solitaire.S.pos;
+			Card[]x = Ultimate_Solitaire.S.multiMov;
+			for (int i = 1; i<x.Length;i++){
+				tpos.z -=1;
+				tpos.y -=.5f;
+				x[i].transform.position = tpos;
+				Ultimate_Solitaire.S.tableaus [tabl1].Remove (x[i]);
+				Ultimate_Solitaire.S.tableaus [tabl2].Add (x[i]); 
+				x[i].slotDef.TableauNum = tabl2;
+
+
+
+			}
+			
 
 		}
 
