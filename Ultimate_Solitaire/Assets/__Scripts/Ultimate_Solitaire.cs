@@ -13,9 +13,9 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public List<Card>[] tableaus = new List<Card>[7];
 
 	// CARD REFERENCES
-	public Card  		clickedCard;// the card being moved
-	public Card 		tp; 		// temp card for moving discard cards
-	public Card 		tempCard; 	// a slot for the other card in a movement action
+	public Card  		clickedCard;	// the card being moved
+	public Card 		tp; 			// temp card for moving discard cards
+	public Card 		tempCard; 		// a slot for the other card in a movement action
 	
 	Vector3 			mousePos2D;
 	Vector3 			mousePos3D;
@@ -23,7 +23,11 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public bool 		clicked = false;
 	public bool 		hover = false;
 	public bool 		multi = false;
-	public Card[] 		multiMov;
+	
+	public Card[] 		multiMov;		// multiMov contains a reference to any multiple cards being moved
+	public string[]		multiLayers;	// multiLayers contains a reference to the layers of all multiMov cards
+	public Vector3[]	multiOriginal;	// multiOriginal contains a reference to the original positions of all multiMov cards
+
 	// LAYOUT INFORMATION
 	public 				Layout layout;
 	public 				TextAsset 	deckXML;
@@ -60,7 +64,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
-		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
+		if (clicked = true && clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
 
 			// New multi-moving code
@@ -127,13 +131,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			cp.SetSortingLayerName(tSD.layerName);
 			int temp = cp.slotDef.TableauNum;
 			tableaus[temp].Add (cp);
-			
-			
 		}
 
-
-
-		
 		UpdateDrawPile ();
 	}
 

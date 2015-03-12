@@ -410,6 +410,8 @@ public class Card : MonoBehaviour {
 		newSortingLayer = null;
 		colType = CollisionType.notColliding;
 		colTemp = null;
+		validCol = false;
+		isColliding = false;
 	}
 
 
