@@ -29,27 +29,26 @@ public class Card : MonoBehaviour {
 	public List<GameObject> decoGOs = new List<GameObject>(); 	// Decorators list
 	public List<GameObject> pipGOs = new List<GameObject>();	// Pips list
 	public SpriteRenderer[] spriteRenderers;
-	
-	
 	public GameObject 		back;  								// the back of the card
-	public CardState 		state = CardState.drawpile;
-	public List<Card> 		hiddenBy = new List<Card>();
 	public int 				layoutID;
 	public SlotDef 			slotDef;
+
+	public CardState 		state = CardState.drawpile;
+	bool 					disableFon = false;					// this prevents setting two foundations to the same suit
+
+	// TEMPORARY VARIABLES TO USE IN MOVE LOGIC
+	// public List<Card> 		hiddenBy = new List<Card>();
+	// public CardState		prevState = CardState.empty;		// Stores the previous state of the card when moved, so that it can be returned should the trigger no longer be called
 	bool 					drawn = false;
 	bool 					valid = false;
 	bool 					fMove = false;
-	bool 					disableFon = false;					// this prevents setting two foundations to the same suit
-	
-	public string 			prevSortingLayer;					// Stores the previous sorting layer so that we can return the card to it if necessary
-	public string			newSortingLayer;
-	
-	public CardState		prevState = CardState.empty;		// Stores the previous state of the card when moved, so that it can be returned should the trigger no longer be called
 	public int				prevTableau;						// If the previous state was in the tableau, this stores the tableau that used to store this
 	public bool				validCol = false;
 	public bool				isColliding = false;				// Check to see whether or not a valid move is already being tried
-	public Collider			colTemp;
-	public CollisionType	colType;
+	public Collider			colTemp;							// Handle for a valid collision GameObject
+	public CollisionType	colType;							// The type of collision currently happening
+	public string 			prevSortingLayer;					// Stores the previous sorting layer so that we can return the card to it if necessary
+	public string			newSortingLayer;					// Stores the new sorting layer to place a card in when we finish a move
 	
 	public 					CardDefinition def; 				// parsed from DeckXML.xml
 
@@ -123,7 +122,7 @@ public class Card : MonoBehaviour {
 		prevSortingLayer = GetSortingLayerName ();
 		// this.SetSortingLayerName("MovingCard");
 		
-		print ("The current sorting layer is: " + prevSortingLayer);
+		// print ("The current sorting layer is: " + prevSortingLayer);
 		// If face-up on the tableau, make this card movable
 		if (this.state == CardState.tableau) {
 			// Change Layer to MovingCard, which is the highest sorting 
@@ -152,6 +151,10 @@ public class Card : MonoBehaviour {
 				for (int i = q ; i<x.Length; i++){
 					// print (x[i].name);
 					Ultimate_Solitaire.S.multiMov[j] = x[i];
+					/*
+					Ultimate_Solitaire.S.multiLayers[j] = x[i].GetSortingLayerName ();
+					Vector3 v = x[i].transform.position;
+					Ultimate_Solitaire.S.multiOriginal[j] = v; */
 					j++;
 					
 				}
@@ -199,10 +202,11 @@ public class Card : MonoBehaviour {
 				}
 			}
 		}
+		x = null;
 	}
 
 	void OnMouseUp() {
-		// If the card is colliding with something valid, do the game logic
+		// If the card is colliding with a valid move, do the game logic
 		if (colTemp != null) {
 			DoMoveLogic();
 			colTemp = null;
@@ -244,6 +248,7 @@ public class Card : MonoBehaviour {
 		ResetMoveLogic ();
 	}
 
+	// DoMoveLogic() does a specific card moving method depending on the type of collision the trigger that the card is over is generating
 	void DoMoveLogic(){
 		if (colType == CollisionType.empty) {
 			print ("Trying MoveToEmpty()");
@@ -337,9 +342,9 @@ public class Card : MonoBehaviour {
 				Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
 				clickedcard.slotDef.TableauNum = tableaunumb;
 				passThrough = true;
-				
-				// SET THE LAYER. The row number is equal to the card's new place in the tableau
 				valid = true;
+
+				// SET THE LAYER. The row number is equal to the card's new place in the tableau
 				newSortingLayer = "Row" + (Ultimate_Solitaire.S.tableaus [tableaunumb].Count - 1);
 				print ("Moved card from discard with new sorting layer of " + newSortingLayer);
 			}
@@ -414,6 +419,9 @@ public class Card : MonoBehaviour {
 		isColliding = false;
 	}
 
+	// ******************************************************************************************************
+	// *************************************Utility Methods**************************************************
+	// ******************************************************************************************************
 
 	// Grab the current sorting layer name
 	public string GetSortingLayerName() {
@@ -462,7 +470,7 @@ public class Card : MonoBehaviour {
 	public void SetTableauSortingOrder(Card otherCard) {
 		string temp = otherCard.GetSortingLayerName ();
 		int otherNum = int.Parse (temp);
-		print (otherNum);
+		// print (otherNum);
 		SetSortingLayerName ("Row" + (otherNum + 1));
 	}
 }

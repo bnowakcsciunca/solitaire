@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class Foundation : MonoBehaviour {
 	public int curRank = 0;
 	public string suit ;

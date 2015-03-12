@@ -46,14 +46,15 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Foundation.cs" />
      <Compile Include="Assets\__Scripts\Cards\Card.cs" />
      <Compile Include="Assets\__Scripts\Cards\Deck.cs" />
      <Compile Include="Assets\__Scripts\Cards\Solitaire.cs" />
+     <Compile Include="Assets\__Scripts\Foundation.cs" />
      <Compile Include="Assets\__Scripts\Layout.cs" />
      <Compile Include="Assets\__Scripts\PT_XMLReader.cs" />
      <Compile Include="Assets\__Scripts\TableauAnc.cs" />
      <Compile Include="Assets\__Scripts\UI\End_Screen.cs" />
+     <Compile Include="Assets\__Scripts\UI\Game_Screen.cs" />
      <Compile Include="Assets\__Scripts\UI\Splash.cs" />
      <Compile Include="Assets\__Scripts\UI\Start_Screen.cs" />
      <Compile Include="Assets\__Scripts\Ultimate_Solitaire.cs" />

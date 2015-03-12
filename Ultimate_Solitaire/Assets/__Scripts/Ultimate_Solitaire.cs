@@ -44,6 +44,9 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		multiLayers = new string[13];
+		multiOriginal = new Vector3[13];
+
 		deck = GetComponent<Deck> ();
 		deck.InitDeck (deckXML.text);
 		Deck.Shuffle (ref deck.cards); // shuffles deck
