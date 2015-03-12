@@ -18,7 +18,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 <<<<<<< HEAD
-<<<<<<< HEAD
 																																																																																		GlobalSection(MonoDevelopProperties) = preSolution
 =======
 																																																																																		GlobalSection(MonoDevelopProperties) = preSolution
@@ -26,9 +25,6 @@ Global
 =======
 																																																																																					GlobalSection(MonoDevelopProperties) = preSolution
 >>>>>>> origin/master
-=======
-																																																																																			GlobalSection(MonoDevelopProperties) = preSolution
->>>>>>> parent of 83f463a... Multicard moves for empty slots (again)
 =======
 																																																																															GlobalSection(MonoDevelopProperties) = preSolution
 >>>>>>> origin/TEST
