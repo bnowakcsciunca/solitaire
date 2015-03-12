@@ -26,13 +26,13 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Card[] 		multiMov;
 
 	// LAYOUT INFORMATION
-	public Layout layout;
-	public TextAsset 	deckXML;
-	public TextAsset layoutXML;
-	public Vector3 layoutCenter;
-	public float xOffset = 3;
-	public float yOffset = 2.5f;
-	public Transform layoutAnchor;
+	public 				Layout layout;
+	public 				TextAsset 	deckXML;
+	public 				TextAsset layoutXML;
+	public 				Vector3 layoutCenter;
+	public 				float xOffset = 3;
+	public 				float yOffset = 2.5f;
+	public 				Transform layoutAnchor;
 
 	void Awake(){
 		
