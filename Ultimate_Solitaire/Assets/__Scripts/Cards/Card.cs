@@ -107,12 +107,42 @@ public class Card : MonoBehaviour {
 			print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count); 
 
 		}
-		if (king.state == CardState.tableau) {
+
+		Card[] x = Ultimate_Solitaire.S.tableaus [king.slotDef.TableauNum].ToArray ();
+		int q = 0;
+		for (int i = 0; i<x.Length; i++) {
+			if (x[i].name == king.name){
+				q = i;
+			}	
+		}
+		if (king.state == CardState.tableau && q == x.Length-1) {
 			int temp = king.slotDef.TableauNum;	
 			Ultimate_Solitaire.S.tableaus[temp].Remove(king);
 			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
 			king.slotDef.TableauNum = anc.pileID;
 			print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count);
+		}
+
+		if (king.state == CardState.tableau && q != x.Length - 1) {
+			int temp = king.slotDef.TableauNum;	
+			Ultimate_Solitaire.S.tableaus[temp].Remove(king);
+			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
+			king.slotDef.TableauNum = anc.pileID;
+			Card[] tempr = Ultimate_Solitaire.S.multiMov;
+			Vector3 kpos = anc.transform.position;
+			kpos.z -=2;
+			for (int i = 1; i<tempr.Length;i++){
+				Ultimate_Solitaire.S.tableaus[tempr[i].slotDef.TableauNum].Remove(tempr[i]);
+				Ultimate_Solitaire.S.tableaus[anc.pileID].Add(tempr[i]);
+				tempr[i].slotDef.TableauNum= anc.pileID;
+				kpos.z -= 1;
+				kpos.y -= .5f;
+				tempr[i].transform.position = kpos;
+
+
+			}
+
+
 		}
 
 	

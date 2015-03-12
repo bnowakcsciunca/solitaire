@@ -15,7 +15,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	// CARD REFERENCES
 	public Card  		clickedCard;// the card being moved
 	public Card 		tp; 		// temp card for moving discard cards
-	public Card 		tempCard; 	// a slot for the other card in a movement action
+	public Card 		tempCard; 	// a slot for the other card in a movement action       
 	
 	Vector3 			mousePos2D;
 	Vector3 			mousePos3D;
