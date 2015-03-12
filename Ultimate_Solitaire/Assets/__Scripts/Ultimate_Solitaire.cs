@@ -22,7 +22,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Vector3 		pos;
 	public bool 		clicked = false;
 	public bool 		hover = false;
-
+	public bool 		multi = false;
+	public Card[] multiMov;
 	// LAYOUT INFORMATION
 	public Layout layout;
 	public TextAsset 	deckXML;

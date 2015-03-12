@@ -164,6 +164,7 @@ public class Card : MonoBehaviour {
 						clickedcard.state = CardState.tableau;
 						int tableaunumb = otherCard.slotDef.TableauNum;
 						Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
+				clickedcard.slotDef.TableauNum = tableaunumb;
 				passThrough = true;
 //						Card[]tem = Ultimate_Solitaire.S.discardPile.ToArray();
 				//tem[tem.Length-1].SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
@@ -181,7 +182,7 @@ public class Card : MonoBehaviour {
 							Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
 							
 					clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
-					clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);
+					clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
 						}	
 						//print (Ultimate_Solitaire.S.tableaus [tabl2].Count); 
 				}
@@ -193,9 +194,32 @@ public class Card : MonoBehaviour {
 
 	void OnMouseDown(){
 		if (this.state == CardState.tableau) {
+			int q = 0;
+			int j = 0;
 			Ultimate_Solitaire.S.clicked = true;
 			Ultimate_Solitaire.S.clickedCard = this;
-			Ultimate_Solitaire.S.pos = this.transform.position;
+			int tabl = this.slotDef.TableauNum;
+			Card[]x = Ultimate_Solitaire.S.tableaus[tabl].ToArray();
+			for (int i = 0;i<x.Length;i++){
+				if (x[i].name == this.name)
+					q = i;
+			}
+			print (q);
+			if (q != x.Length-1 && x[q].faceUp==true){
+				print ("multi");
+				Ultimate_Solitaire.S.multi = true;
+			}
+			if (Ultimate_Solitaire.S.multi == true){
+				Ultimate_Solitaire.S.multiMov = new Card[x.Length-q];
+				for (int i = q ; i<x.Length; i++){
+					//print (x[i].name);
+					Ultimate_Solitaire.S.multiMov[j] = x[i];
+					j++;
+
+				}
+
+			}
+			Ultimate_Solitaire.S.pos = this.transform.position;  
 
 			// Change Layer to be above other cards
 			// prevSortingLayer = this.Set
@@ -247,7 +271,7 @@ public class Card : MonoBehaviour {
 
 		if (drawn == false) {
 			// Return to original sorting layer
-			if (valid == false)
+			if (valid == false&&fMove == false)
 			this.SetSortingLayerName(prevSortingLayer);
 
 			Ultimate_Solitaire.S.clicked = false;
@@ -268,6 +292,8 @@ public class Card : MonoBehaviour {
 		valid = false;
 		fMove = false;
 		disableFon = false;
+		Ultimate_Solitaire.S.multi = false;
+		Ultimate_Solitaire.S.multiMov = null;
 
 	}
 
