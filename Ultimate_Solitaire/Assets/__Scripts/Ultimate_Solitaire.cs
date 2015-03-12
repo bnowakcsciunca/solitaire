@@ -23,7 +23,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public bool 		clicked = false;
 	public bool 		hover = false;
 	public bool 		multi = false;
-	public Card[] multiMov;
+	public Card[] 		multiMov;
 	// LAYOUT INFORMATION
 	public 				Layout layout;
 	public 				TextAsset 	deckXML;
@@ -62,6 +62,14 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		mousePos3D.z++;
 		if (clicked = true&& clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
+
+			// New multi-moving code
+			if (multiMov != null) {
+				for (int i = 0; i<multiMov.Length; i++) {
+					mousePos3D.y -= 0.5f;
+					multiMov[i].transform.position = mousePos3D;
+				}
+			}
 		}
 		
 	}
