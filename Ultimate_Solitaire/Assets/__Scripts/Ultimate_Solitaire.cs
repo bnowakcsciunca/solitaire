@@ -11,6 +11,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public List<Card> 	discardPile;
 	[SerializeField]
 	public List<Card>[] tableaus = new List<Card>[7];
+	public List<Card>[] foundations = new List<Card>[4];
 
 	// CARD REFERENCES
 	public Card  		clickedCard;	// the card being moved

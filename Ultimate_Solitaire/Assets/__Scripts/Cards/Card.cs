@@ -313,9 +313,9 @@ public class Card : MonoBehaviour {
 					Ultimate_Solitaire.S.tableaus [tem].Remove (clickedC);
 					if (clickedC.state == CardState.discard)
 						Ultimate_Solitaire.S.discardPile.Remove (clickedC); 
-					fon.pile.Add (clickedC);
+					Ultimate_Solitaire.S.foundations[fon.pileID].Add (clickedC);
 					// print (fon.pile.Count);
-					clickedC.SetSortOrder (100 * fon.pile.Count);
+					clickedC.SetSortOrder (100 * Ultimate_Solitaire.S.foundations[fon.pileID].Count);
 					fMove = true;
 					disableFon = true;
 				}
