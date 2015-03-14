@@ -78,7 +78,7 @@ public class Card : MonoBehaviour {
 		(4) Call the relative function
 	*/
 	void OnTriggerEnter(Collider col){
-		if (isColliding == false) {
+		//if (isColliding == false) {
 			if (col.tag == "Empty" && this.rank == 13) { 
 				if (col.GetComponent<TableauAnc> ().pactive == true) { 
 					colType = CollisionType.empty;
@@ -105,13 +105,13 @@ public class Card : MonoBehaviour {
 					}
 				}
 			}
-		}
+		//}
 	}
 
 	void OnTriggerExit(Collider col) {
 		if (colTemp == col) {
 			colTemp = null;
-			isColliding = false;
+			// isColliding = false;
 			colType = CollisionType.notColliding;
 		}
 	}
@@ -182,10 +182,17 @@ public class Card : MonoBehaviour {
 			tem.state = CardState.discard;
 			tem.faceUp = true;
 			tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
+			// NEW VARIABLE
+			int discardSize = Ultimate_Solitaire.S.discardPile.Count;
+			float staggerDist = 0f;
+			print (discardSize);
+			for (int i=0; i<discardSize; i++) {
+				staggerDist -= 0.5f;
+			}
 			tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
 			                                          Ultimate_Solitaire.S.layout.discardPile.y,
-			                                          .05f);
-			tem.SetSortOrder(100 * Ultimate_Solitaire.S.discardPile.Count);
+			                                          staggerDist);
+			tem.SetSortOrder(4 * Ultimate_Solitaire.S.discardPile.Count);
 			drawn = true;
 			// Set the sorting layer to discard so that these things draw correctly
 			tem.SetSortingLayerName ("Discard");
@@ -208,44 +215,14 @@ public class Card : MonoBehaviour {
 	void OnMouseUp() {
 		// If the card is colliding with a valid move, do the game logic
 		if (colTemp != null) {
+			print ("Valid move");
 			DoMoveLogic();
 			colTemp = null;
+		} else {
+			print ("Not a valid move; colTemp is " + colTemp);
+			// Reset all logic variables to false / null
+			ResetMoveLogic ();
 		}
-
-		// If the card clicked is NOT the DrawPile, then proceed
-		if (drawn == false) {
-			// If it's not a valid move, then there is no newSortingLayer. newSortingLayer = prevSortingLayer so that it will return to the correct position in the tableau
-			if (valid == false) {
-				// Return to original sorting layer
-				// print ("Going back to original place");
-				// print ("Previous sorting layer should be: " + prevSortingLayer);
-				newSortingLayer = prevSortingLayer;
-			}
-			if (this.state == CardState.tableau) {
-				this.transform.position = Ultimate_Solitaire.S.pos;
-				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
-			}
-			else if (this.state == CardState.discard){
-				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
-				this.SetSortingLayerName ("Discard");
-			}
-			else if (fMove == true) {
-				Ultimate_Solitaire.S.clickedCard.state = CardState.foundation;
-				this.SetSortingLayerName ("Foundation");
-			}
-			else {
-				print ("Something bad happened and this card is not working correctly.");
-			}
-			
-			Ultimate_Solitaire.S.clicked = false; 		// Set the clicked boolean to false in Ultimate_Solitaire.cs
-			Ultimate_Solitaire.S.clickedCard = null;	// Card has been moved so remove the reference to it
-			Ultimate_Solitaire.S.tempCard = null;
-			Ultimate_Solitaire.S.pos = Vector3.zero;	// Reset the move vector for the game
-			
-		}
-		
-		// Reset all logic variables to false / null
-		ResetMoveLogic ();
 	}
 
 	// DoMoveLogic() does a specific card moving method depending on the type of collision the trigger that the card is over is generating
@@ -263,6 +240,7 @@ public class Card : MonoBehaviour {
 			print ("Trying MoveCard()");
 			MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard); 
 		}
+		ResetMoveLogic ();
 	}
 
 	// ******************************************************************************************************
@@ -405,6 +383,38 @@ public class Card : MonoBehaviour {
 
 	// ResetMoveLogic() should return all move variables to the conditions they exist in before a move is attempted (ie, the card is clicked)
 	void ResetMoveLogic() {
+		// If the card clicked is NOT the DrawPile, then proceed
+		if (drawn == false) {
+			// If it's not a valid move, then there is no newSortingLayer. newSortingLayer = prevSortingLayer so that it will return to the correct position in the tableau
+			if (valid == false) {
+				// Return to original sorting layer
+				// print ("Going back to original place");
+				// print ("Previous sorting layer should be: " + prevSortingLayer);
+				newSortingLayer = prevSortingLayer;
+			}
+			if (this.state == CardState.tableau) {
+				this.transform.position = Ultimate_Solitaire.S.pos;
+				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
+			}
+			else if (this.state == CardState.discard){
+				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
+				this.SetSortingLayerName ("Discard");
+			}
+			else if (fMove == true) {
+				Ultimate_Solitaire.S.clickedCard.state = CardState.foundation;
+				this.SetSortingLayerName ("Foundation");
+			}
+			else {
+				print ("Something bad happened and this card is not working correctly.");
+			}
+			
+			Ultimate_Solitaire.S.clicked = false; 		// Set the clicked boolean to false in Ultimate_Solitaire.cs
+			Ultimate_Solitaire.S.clickedCard = null;	// Card has been moved so remove the reference to it
+			Ultimate_Solitaire.S.tempCard = null;
+			Ultimate_Solitaire.S.pos = Vector3.zero;	// Reset the move vector for the game
+			
+		}
+
 		drawn = false;
 		valid = false;
 		fMove = false;
