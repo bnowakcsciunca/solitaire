@@ -27,7 +27,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	
 	public Card[] 		multiMov;		// multiMov contains a reference to any multiple cards being moved
 	public string[]		multiLayers;	// multiLayers contains a reference to the layers of all multiMov cards
-	public Vector3[]	multiOriginal;	// multiOriginal contains a reference to the original positions of all multiMov cards
+	public Vector3[]	multiPos;		// multiPos contains a reference to the original positions of all multiMov cards
 
 	// LAYOUT INFORMATION
 	public 				Layout 		layout;
@@ -46,7 +46,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		multiLayers = new string[13];
-		multiOriginal = new Vector3[13];
+		multiPos = new Vector3[13];
 
 		deck = GetComponent<Deck> ();
 		deck.InitDeck (deckXML.text);
@@ -72,15 +72,19 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			clickedCard.transform.position = mousePos3D;
 
 			// New multi-moving code
-			if (multiMov != null) {
+			// Check that both multi is true AND that a valid multiMov array exists
+			if (multi != false && multiMov != null) {
 				for (int i = 0; i<multiMov.Length; i++) {
 					mousePos3D.y -= 0.5f;
+					//mousePos3D.z -= 0.5f;
 					multiMov[i].transform.position = mousePos3D;
 				}
 			}
 		}
 		
 	}
+
+
 	void UpdateDrawPile(){
 		Card cd;
 		for (int i = 0; i<drawPile.Count; i++) {
@@ -140,5 +144,15 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		UpdateDrawPile ();
 	}
 
-
+	// MultiReset() will reset the positions of all cards in the multiMov.
+	// Note that this does not reset any internal logic for Lists, etc. - merely the visual
+	// representation. The logic is handled in the Card class
+	public void MultiReset() {
+		Card c;
+		for (int i=0; i<multiMov.Length; i++) {
+			c = multiMov[i];
+			c.transform.position = multiPos[i];
+			c.SetSortingLayerName(multiLayers[i]);
+		}
+	}
 }
