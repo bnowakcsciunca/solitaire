@@ -56,17 +56,17 @@ public class Utils : MonoBehaviour {
 	static public Bounds camBounds {
 		get {
 			// if _camBounds hasn't been set yet 
-			if (_camBounds.size == Vector3.zero) {
+			if (_camBounds.size == Vector3.zero) {   
 				// SetCameraBounds using the default Camera
 				SetCameraBounds();
 			}
-			return( _camBounds );
+			return( _camBounds );   
 		}
 	}
 	// This is the private static field that camBounds uses
 	static private Bounds _camBounds;
 	
-	public static void SetCameraBounds(Camera cam=null) {
+	public static void SetCameraBounds(Camera cam=null) {   
 		// If no Camera was passed in, use the main Camera
 		if (cam == null) cam = Camera.main;
 		// This makes a couple important assumptions about the camera!:

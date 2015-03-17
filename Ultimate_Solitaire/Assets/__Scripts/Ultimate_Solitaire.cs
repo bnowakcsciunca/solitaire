@@ -68,7 +68,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
 		mousePos3D.z++;
-		if (clicked = true && clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard) && clickedCard.faceUp == true) {
+		if (clicked = true && clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard ) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
 
 			// New multi-moving code

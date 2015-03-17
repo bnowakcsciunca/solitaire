@@ -217,6 +217,7 @@ public class Card : MonoBehaviour {
 				if (fon.suit == "none" || fon.suit == clickedC.suit) {
 					Vector3 transfer = fon.transform.position;
 					transfer.z -= 1;
+
 					Ultimate_Solitaire.S.pos = transfer;
 
 					fon.curRank = clickedC.rank;
@@ -230,8 +231,10 @@ public class Card : MonoBehaviour {
 					Ultimate_Solitaire.S.foundations[fon.pileID].Add (clickedC);
 					// print (fon.pile.Count);
 					clickedC.SetSortOrder (100 * Ultimate_Solitaire.S.foundations[fon.pileID].Count);
+
 					fMove = true;
-					disableFon = true;
+					disableFon = true;// prevents multiple foundations from grabbing this card
+					//this.state = CardState.foundation;
 				}
 			}
 		}
@@ -244,8 +247,8 @@ public class Card : MonoBehaviour {
 		// Change Layer to MovingCard, which is the highest sorting 
 		this.SetSortingLayerName("MovingCard");
 		
-		int q = 0;
-		int j = 0;
+		int q = 0;//the index in the temporay array of the clicked card
+		int j = 0;// an index used to iterate through the array sans the clicked card
 		Ultimate_Solitaire.S.clicked = true;
 		Ultimate_Solitaire.S.clickedCard = this;
 		int tabl = this.slotDef.TableauNum;
@@ -289,7 +292,7 @@ public class Card : MonoBehaviour {
 		prevSortingLayer = GetSortingLayerName();
 		this.SetSortingLayerName("MovingCard");
 		
-		Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();
+		Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();// a temporary array for this move
 		Ultimate_Solitaire.S.tp = tem[tem.Length-1];
 		Ultimate_Solitaire.S.clicked = true;
 		Ultimate_Solitaire.S.clickedCard = Ultimate_Solitaire.S.tp;
@@ -322,7 +325,7 @@ public class Card : MonoBehaviour {
 
 	void FlipCard() {
 		Card[] x;
-		prevSortingLayer = GetSortingLayerName ();
+		//prevSortingLayer = GetSortingLayerName ();
 		int tem = this.slotDef.TableauNum;
 		x = Ultimate_Solitaire.S.tableaus[tem].ToArray();
 		for (int i = 0;i <x.Length;i++){
@@ -440,13 +443,15 @@ public class Card : MonoBehaviour {
 				this.transform.position = Ultimate_Solitaire.S.pos;
 				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
 			}
-			else if (this.state == CardState.discard){
+			else if (this.state == CardState.discard && fMove == false){
 				Ultimate_Solitaire.S.tp.transform.position = Ultimate_Solitaire.S.pos;
 				this.SetSortingLayerName ("Discard");
 			}
 			else if (fMove == true) {
 				Ultimate_Solitaire.S.clickedCard.state = CardState.foundation;
+				Ultimate_Solitaire.S.clickedCard.transform.position = Ultimate_Solitaire.S.pos;
 				this.SetSortingLayerName ("Foundation");
+
 			}
 			else {
 				print ("Something bad happened and this card is not working correctly.");
