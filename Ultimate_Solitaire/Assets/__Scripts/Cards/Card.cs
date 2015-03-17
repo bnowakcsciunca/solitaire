@@ -33,15 +33,15 @@ public class Card : MonoBehaviour {
 	public int 				layoutID;
 	public SlotDef 			slotDef;
 
-	public CardState 		state = CardState.drawpile;
+	public CardState 		state = CardState.drawpile;			// The state the card is in
 	bool 					disableFon = false;					// this prevents setting two foundations to the same suit
 
 	// TEMPORARY VARIABLES TO USE IN MOVE LOGIC
 	// public List<Card> 		hiddenBy = new List<Card>();
 	// public CardState		prevState = CardState.empty;		// Stores the previous state of the card when moved, so that it can be returned should the trigger no longer be called
-	bool 					drawn = false;
-	bool 					valid = false;
-	bool 					fMove = false;
+	bool 					drawn = false;						// Flag for clicking on the draw pile
+	bool 					valid = false;						// Flag for a valid move
+	bool 					fMove = false;						// Flag for a foundation move
 	public int				prevTableau;						// If the previous state was in the tableau, this stores the tableau that used to store this
 	public bool				validCol = false;
 	public bool				isColliding = false;				// Check to see whether or not a valid move is already being tried
@@ -52,6 +52,10 @@ public class Card : MonoBehaviour {
 	
 	public 					CardDefinition def; 				// parsed from DeckXML.xml
 
+	public          		Color startcolor;
+	public          		Color highlight;
+
+
 	public bool faceUp{
 		get {
 			return (!back.activeSelf);
@@ -60,45 +64,51 @@ public class Card : MonoBehaviour {
 			back.SetActive(!value);
 		}
 	}
+
+	void Start() {
+		startcolor = renderer.material.color;
+	}
+
 	// OnMouseEnter() lets the Ultimate_Solitaire code know that a card is being hovered over
 	void OnMouseEnter(){
+		if (this.state != CardState.drawpile && this.faceUp == true)
+			renderer.material.color = highlight;
 		Ultimate_Solitaire.S.hover = true;
 	}
 	
 	// OnMouseExit() lets the Ultimate_Solitaire code know that a card is no longer being hovered over
 	void OnMouseExit(){
 		Ultimate_Solitaire.S.hover = false;
+		renderer.material.color = startcolor;
 	}
 
 	void OnTriggerEnter(Collider col){
-		//if (isColliding == false) {
-			if (col.tag == "Empty" && this.rank == 13) { 
-				if (col.GetComponent<TableauAnc> ().pactive == true) { 
-					colType = CollisionType.empty;
-					colTemp = col;
-					isColliding = true;
-					// print ("Colliding now with " + col + "; collision type is: " + colType);
-				}
-			} else if (col.name == "Foundation") {
-				colType = CollisionType.foundation;
+		if (col.tag == "Empty" && this.rank == 13) { 
+			if (col.GetComponent<TableauAnc> ().pactive == true) { 
+				colType = CollisionType.empty;
 				colTemp = col;
 				isColliding = true;
 				// print ("Colliding now with " + col + "; collision type is: " + colType);
-			} else {
-				if (col.tag != "Empty" && col.GetComponent<Card>().faceUp == true) {
-					Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
-					if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
-						valid = Ultimate_Solitaire.S.CheckValid (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
-						if (valid == true) {
-							colType = CollisionType.tableau;
-							colTemp = col;
-							isColliding = true;
-							// print ("Colliding now with " + col + "; collision type is: " + colType);
-						}
+			}
+		} else if (col.name == "Foundation") {
+			colType = CollisionType.foundation;
+			colTemp = col;
+			isColliding = true;
+			// print ("Colliding now with " + col + "; collision type is: " + colType);
+		} else {
+			if (col.tag != "Empty" && col.GetComponent<Card>().faceUp == true) {
+				Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
+				if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
+					valid = Ultimate_Solitaire.S.CheckValid (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
+					if (valid == true) {
+						colType = CollisionType.tableau;
+						colTemp = col;
+						isColliding = true;
+						// print ("Colliding now with " + col + "; collision type is: " + colType);
 					}
 				}
-			}
-		//}
+			}			
+		}
 	}
 
 	void OnTriggerExit(Collider col) {
@@ -208,8 +218,7 @@ public class Card : MonoBehaviour {
 					Vector3 transfer = fon.transform.position;
 					transfer.z -= 1;
 					Ultimate_Solitaire.S.pos = transfer;
-					
-					
+
 					fon.curRank = clickedC.rank;
 					fon.suit = clickedC.suit;
 					int tem = clickedC.slotDef.TableauNum;
@@ -260,14 +269,14 @@ public class Card : MonoBehaviour {
 				// Grab the cards
 				Ultimate_Solitaire.S.multiMov[j] = x[i];
 				// Grab the original layers
-				// Ultimate_Solitaire.S.multiLayers[j] = x[i].GetSortingLayerName ();
+				Ultimate_Solitaire.S.multiLayers[j] = x[i].GetSortingLayerName ();
 				// Then grab the original position
-				// Vector3 v = x[i].transform.position;
-				// Ultimate_Solitaire.S.multiPos[j] = v; 
+				Vector3 v = x[i].transform.position;
+				Ultimate_Solitaire.S.multiPos[j] = v; 
 				
 				// Ultimate_Solitaire.S.multiMov[j].SetSortingLayerName ("MovingCard");
 				// Ultimate_Solitaire.S.multiMov[j].SetSortOrder (j);
-				j++;
+				j++; // J is used because it starts at 0, and i starts at q. It increments through the shrunken array
 				
 			}
 			
@@ -329,14 +338,14 @@ public class Card : MonoBehaviour {
 		
 		prevSortingLayer = clickedcard.GetSortingLayerName ();
 		
-		// If you're moving a single card
+		// Move a single card to the tableau
 		if(otherCard.state == CardState.tableau && Ultimate_Solitaire.S.multi == false){
 			Ultimate_Solitaire.S.pos = otherCard.transform.position;
-			Ultimate_Solitaire.S.pos.z -= 1;
-			Ultimate_Solitaire.S.pos.y -= .5f;
-			bool passThrough = false;
+			Ultimate_Solitaire.S.pos.z -= 1;	// Adjusts the z position relative to the parent card
+			Ultimate_Solitaire.S.pos.y -= .5f;	// Adjusts y position relative to the parent card in the tableau
+			bool passThrough = false;			// Prevents bugs between moving discard / moving tableau
 			
-			// If you're moving the card from the Discard pile
+			// Move from discard pile
 			if (clickedcard.state == CardState.discard) {
 				Ultimate_Solitaire.S.discardPile.Remove (clickedcard);	
 				clickedcard.state = CardState.tableau;
@@ -350,12 +359,7 @@ public class Card : MonoBehaviour {
 				newSortingLayer = "Row" + (Ultimate_Solitaire.S.tableaus [tableaunumb].Count - 1);
 				print ("Moved card from discard with new sorting layer of " + newSortingLayer);
 			}
-			
-			//else if (clickedcard.state == CardState.tableau && passThrough == false) {
-			//	int tabl1 = clickedcard.slotDef.TableauNum;
-			//	int tabl2 = otherCard.slotDef.TableauNum;
-			//}
-			// If you're moving the card from another Tableau
+			// Move from tableau pile
 			else if (clickedcard.state == CardState.tableau && passThrough == false && Ultimate_Solitaire.S.multi == false) {
 				int tabl1 = clickedcard.slotDef.TableauNum;
 				int tabl2 = otherCard.slotDef.TableauNum;
@@ -375,7 +379,7 @@ public class Card : MonoBehaviour {
 			}
 		}
 
-		// If you're moving multiple cards
+		// Move multiple cards
 		if (clickedcard.state == CardState.tableau && Ultimate_Solitaire.S.multi == true) {
 			Ultimate_Solitaire.S.pos = otherCard.transform.position;
 			Ultimate_Solitaire.S.pos.z -= 1;
@@ -424,9 +428,15 @@ public class Card : MonoBehaviour {
 				newSortingLayer = prevSortingLayer;
 				if (Ultimate_Solitaire.S.multi == true) {
 					Ultimate_Solitaire.S.MultiReset ();
+					/*this.SetSortingLayerName (newSortingLayer);
+					int temp = int.Parse (newSortingLayer);
+
+					for (int i = 0; i<Ultimate_Solitaire.S.multiMov.Length; i++) {
+						Ultimate_Solitaire.S.multiMov[i].SetSortingLayerName ("Row" + (temp+i));
+					}*/
 				}
 			}
-			if (this.state == CardState.tableau) {
+			if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == false) {
 				this.transform.position = Ultimate_Solitaire.S.pos;
 				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
 			}
