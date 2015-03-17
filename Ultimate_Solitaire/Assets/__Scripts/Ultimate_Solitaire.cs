@@ -36,7 +36,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public 				Vector3 	layoutCenter;
 	public 				float 		xOffset = 3;
 	public 				float 		yOffset = 2.5f;
-	public 				Transform 	layoutAnchor;
+	public 				Transform 	layoutAnchor;   
 
 	void Awake(){
 		
@@ -84,16 +84,19 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		
 	}
 
+	public void DrawUpdate(){
+		UpdateDrawPile ();
 
+	}
 	void UpdateDrawPile(){
 		Card cd;
-		for (int i = 0; i<drawPile.Count; i++) {
+		for (int i = 0; i<drawPile.Count; i++) { 
 			cd = drawPile[i];
 			cd.transform.parent= layoutAnchor;
 			Vector2 dpStagger = layout.drawPile.stagger;
 			cd.transform.localPosition = new Vector3(layout.multiplier.x * (layout.drawPile.x + i*dpStagger.x),
 			                                         layout.multiplier.y * (layout.drawPile.y + i*dpStagger.y),
-			                                         -layout.drawPile.layerID+0.1f*i);
+			                                         -(layout.drawPile.layerID)+0.1f*i);
 			cd.faceUp = false;
 			cd.state=CardState.drawpile;
 			

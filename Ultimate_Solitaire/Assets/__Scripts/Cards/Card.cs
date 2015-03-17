@@ -300,7 +300,7 @@ public class Card : MonoBehaviour {
 		float staggerDist = 0f;
 		print (discardSize);
 		for (int i=0; i<discardSize; i++) {
-			staggerDist -= 0.5f;
+			staggerDist -= 0.05f;
 		}
 		tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
 		                                          Ultimate_Solitaire.S.layout.discardPile.y,
