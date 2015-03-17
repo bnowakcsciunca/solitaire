@@ -439,7 +439,7 @@ public class Card : MonoBehaviour {
 					}*/
 				}
 			}
-			if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == false) {
+			if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == false&&fMove == false) {
 				this.transform.position = Ultimate_Solitaire.S.pos;
 				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
 			}
