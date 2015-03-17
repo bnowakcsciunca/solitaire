@@ -222,7 +222,7 @@ public class Card : MonoBehaviour {
 
 					fon.curRank = clickedC.rank;
 					fon.suit = clickedC.suit;
-					int tem = clickedC.slotDef.TableauNum;
+					int tem = clickedC.slotDef.TableauNum;// retains this cards tableau number
 					if (clickedC.state == CardState.tableau)
 						prevTableau = tem;
 					Ultimate_Solitaire.S.tableaus [tem].Remove (clickedC);
@@ -241,7 +241,7 @@ public class Card : MonoBehaviour {
 	}
 
 	void CreateTableauMove() {
-		Card[] x;
+		Card[] x; // a temporary array to make this code shorter
 		prevSortingLayer = GetSortingLayerName ();
 
 		// Change Layer to MovingCard, which is the highest sorting 
@@ -251,7 +251,7 @@ public class Card : MonoBehaviour {
 		int j = 0;// an index used to iterate through the array sans the clicked card
 		Ultimate_Solitaire.S.clicked = true;
 		Ultimate_Solitaire.S.clickedCard = this;
-		int tabl = this.slotDef.TableauNum;
+		int tabl = this.slotDef.TableauNum;    // retains tableau number
 		x = Ultimate_Solitaire.S.tableaus[tabl].ToArray();
 		for (int i = 0;i<x.Length;i++){
 			if (x[i].name == this.name)
@@ -302,14 +302,14 @@ public class Card : MonoBehaviour {
 
 	void DrawCard() {
 		// Here I think we should check if the card has children and if so, move the entire pile
-		Card tem = Ultimate_Solitaire.S.DrawCall();
+		Card tem = Ultimate_Solitaire.S.DrawCall();// a temporary place to put the card that was drawn
 		Ultimate_Solitaire.S.discardPile.Add(tem);
 		tem.state = CardState.discard;
 		tem.faceUp = true;
 		tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
 		// NEW VARIABLE
-		int discardSize = Ultimate_Solitaire.S.discardPile.Count;
-		float staggerDist = 0f;
+		int discardSize = Ultimate_Solitaire.S.discardPile.Count; // the size of the discard pile
+		float staggerDist = 0f; // the stagger offset of the base of the pile, incremented for all other cards (this SHOULD BE ZERO here)
 		print (discardSize);
 		for (int i=0; i<discardSize; i++) {
 			staggerDist -= 0.05f;
@@ -324,9 +324,9 @@ public class Card : MonoBehaviour {
 	}
 
 	void FlipCard() {
-		Card[] x;
+		Card[] x;// a temporary array
 		//prevSortingLayer = GetSortingLayerName ();
-		int tem = this.slotDef.TableauNum;
+		int tem = this.slotDef.TableauNum;// retains tableau number
 		x = Ultimate_Solitaire.S.tableaus[tem].ToArray();
 		for (int i = 0;i <x.Length;i++){
 			if (x[i].name == this.name&&i == x.Length-1){
@@ -352,7 +352,7 @@ public class Card : MonoBehaviour {
 			if (clickedcard.state == CardState.discard) {
 				Ultimate_Solitaire.S.discardPile.Remove (clickedcard);	
 				clickedcard.state = CardState.tableau;
-				int tableaunumb = otherCard.slotDef.TableauNum;
+				int tableaunumb = otherCard.slotDef.TableauNum;// retains tableau number
 				Ultimate_Solitaire.S.tableaus [tableaunumb].Add (clickedcard);
 				clickedcard.slotDef.TableauNum = tableaunumb;
 				passThrough = true;
@@ -364,8 +364,8 @@ public class Card : MonoBehaviour {
 			}
 			// Move from tableau pile
 			else if (clickedcard.state == CardState.tableau && passThrough == false && Ultimate_Solitaire.S.multi == false) {
-				int tabl1 = clickedcard.slotDef.TableauNum;
-				int tabl2 = otherCard.slotDef.TableauNum;
+				int tabl1 = clickedcard.slotDef.TableauNum; // retains clicked card's tableau number
+				int tabl2 = otherCard.slotDef.TableauNum; // retains the other card's tableau number
 				
 				if (tabl1 != tabl2){
 					// print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
@@ -387,8 +387,8 @@ public class Card : MonoBehaviour {
 			Ultimate_Solitaire.S.pos = otherCard.transform.position;
 			Ultimate_Solitaire.S.pos.z -= 1;
 			Ultimate_Solitaire.S.pos.y -= .5f;
-			int tabl1 = clickedcard.slotDef.TableauNum;
-			int tabl2 = otherCard.slotDef.TableauNum;
+			int tabl1 = clickedcard.slotDef.TableauNum; // retains clicked card's tableau number
+			int tabl2 = otherCard.slotDef.TableauNum;// retains the other card's tableau number
 			if (tabl1 != tabl2){
 				
 				//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
@@ -398,8 +398,8 @@ public class Card : MonoBehaviour {
 				clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
 				clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
 			}	
-			Vector3 tpos = Ultimate_Solitaire.S.pos;
-			Card[] x = Ultimate_Solitaire.S.multiMov;
+			Vector3 tpos = Ultimate_Solitaire.S.pos; // a vector3 used to calculate the final position of all involved cards 
+			Card[] x = Ultimate_Solitaire.S.multiMov; // an arrya used to track the cards involved in this move
 
 			// For each card, stagger the 
 			for (int i = 1; i<x.Length;i++){
