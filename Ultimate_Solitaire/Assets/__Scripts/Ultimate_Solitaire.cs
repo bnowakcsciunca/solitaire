@@ -86,6 +86,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 					mousePos3D.y -= 0.5f;
 					//mousePos3D.z -= 0.5f;
 					multiMov[i].transform.position = mousePos3D;
+					multiMov[i].SetSortOrder (4 * i);
 				}
 			}
 		}
@@ -165,6 +166,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			c.transform.position = multiPos[i];
 			c.SetSortingLayerName(multiLayers[i]);
 		}
+		multiMov = null;
 	}
 
 	public void UpdateScore() {
