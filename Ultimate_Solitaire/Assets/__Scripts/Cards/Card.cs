@@ -151,11 +151,11 @@ public class Card : MonoBehaviour {
 	void OnMouseUp() {
 		// If the card is colliding with a valid move, do the game logic
 		if (colTemp != null) {
-			print ("Valid move");
+			// print ("Valid move");
 			DoMoveLogic();
 			colTemp = null;
 		} else {
-			print ("Not a valid move; colTemp is " + colTemp);
+			// print ("Not a valid move; colTemp is " + colTemp);
 			// Reset all logic variables to false / null
 			ResetMoveLogic ();
 		}
@@ -165,18 +165,23 @@ public class Card : MonoBehaviour {
 	void DoMoveLogic(){
 		if (colType == CollisionType.empty) {
 			print ("Trying MoveToEmpty()");
-			MoveToEmpty (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<TableauAnc> ()); 
+			MoveToEmpty (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<TableauAnc> ());
+			ResetMoveLogic ();
+			return;
 		}
 		if (colType == CollisionType.foundation) {
 			print ("Trying MoveToFoundation()");
 			MoveToFoundation (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<Foundation> ());
+			ResetMoveLogic ();
+			return;
 		}
 		if (colType == CollisionType.tableau) {
 			Ultimate_Solitaire.S.tempCard = colTemp.GetComponent<Card> ();
 			print ("Trying MoveCard()");
-			MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard); 
+			MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
+			ResetMoveLogic ();
+			return;
 		}
-		ResetMoveLogic ();
 	}
 
 	// ******************************************************************************************************
@@ -185,6 +190,8 @@ public class Card : MonoBehaviour {
 
 	// MoveToEmpty() moves Card king to TableauAnc anc
 	void MoveToEmpty(Card king, TableauAnc anc){
+		valid = true; // Setting this makes layering work
+
 		Ultimate_Solitaire.S.pos = anc.transform.position;
 		Ultimate_Solitaire.S.pos.z -= 2;
 		
@@ -205,7 +212,7 @@ public class Card : MonoBehaviour {
 			// print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count);
 		}
 		// Set the King's sorting layer to be the bottom
-		king.SetSortingLayerName ("Row0");
+		newSortingLayer = "Row0";
 	}
 
 	// MoveToFoundation moves Card clickedC to Foundation fon
@@ -438,6 +445,7 @@ public class Card : MonoBehaviour {
 				// Return to original sorting layer
 				// print ("Going back to original place");
 				// print ("Previous sorting layer should be: " + prevSortingLayer);
+				print ("Not a valid move.");
 				newSortingLayer = prevSortingLayer;
 				if (Ultimate_Solitaire.S.multi == true) {
 					Ultimate_Solitaire.S.MultiReset ();
@@ -451,6 +459,7 @@ public class Card : MonoBehaviour {
 			}
 			if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == false&&fMove == false) {
 				this.transform.position = Ultimate_Solitaire.S.pos;
+				print("The new sorting layer should be " + newSortingLayer);
 				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
 			}
 			else if (this.state == CardState.discard && fMove == false){
