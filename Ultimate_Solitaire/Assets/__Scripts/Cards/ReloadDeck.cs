@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿//-----------------------------------------------------------------------------------
+// this class creates a way to 'restock' the deck after it has been filed through
+//-----------------------------------------------------------------------------------
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class ReloadDeck : MonoBehaviour {
-	public GameObject Box; 
-	Material x;  
-	bool Tenabled = false;
-	int count = 0;
+	public GameObject Box; // the actual gameobject
+	Material x;  // the material attached to Box
+	bool Tenabled = false; // flag for telling if this is enabled
+	int count = 0; // counter for number of times the deck has been passed through
 
 	// Use this for initialization
 	void Start () {
@@ -60,3 +63,4 @@ public class ReloadDeck : MonoBehaviour {
 	}
 
 }
+

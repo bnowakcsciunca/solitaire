@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//-------------------------------------
+// this is an unused script
+//-------------------------------------
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

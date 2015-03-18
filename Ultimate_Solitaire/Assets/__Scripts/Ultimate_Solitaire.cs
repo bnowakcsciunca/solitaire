@@ -19,25 +19,29 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Card 		tp; 			// temp card for moving discard cards
 	public Card 		tempCard; 		// a slot for the other card in a movement action
 	
-	Vector3 			mousePos2D;
-	Vector3 			mousePos3D;
-	public Vector3 		pos;
-	public bool 		clicked = false;
-	public bool 		hover = false;
-	public bool 		multi = false;
+	Vector3 			mousePos2D;		// used for retrieving mouse position
+	Vector3 			mousePos3D;		// used for retrieving mouse position
+	public Vector3 		pos;			// a value for retaining the original position of a card or for changing it's position after a valid move 
+
+	public bool 		clicked = false;	// A flag telling if a card has been clicked or dragged around
+	public bool 		hover = false;		// a flag telling if the pointer is over a card
+	public bool 		multi = false;		// a flag telling if the attempted move involves more then one card
 	
 	public Card[] 		multiMov;		// multiMov contains a reference to any multiple cards being moved
 	public string[]		multiLayers;	// multiLayers contains a reference to the layers of all multiMov cards
 	public Vector3[]	multiPos;		// multiPos contains a reference to the original positions of all multiMov cards
 
 	// LAYOUT INFORMATION
-	public Layout 		layout;
-	public TextAsset 	deckXML;
-	public TextAsset 	layoutXML;
-	public Vector3 		layoutCenter;
-	public float 		xOffset = 3;
-	public float 		yOffset = 2.5f;
-	public Transform 	layoutAnchor;
+	/*
+	 * Most variables here pertain to the initial game layout and are used to set up the game
+	 */
+	public Layout 		layout;   // the layout script reference 
+	public TextAsset 	deckXML;  // the xml doc with the card layout perameters 
+	public TextAsset 	layoutXML; // the xml with the game layout info
+	public Vector3 		layoutCenter; // a pointer to the center of the layout
+	public float 		xOffset = 3; // offset between piles
+	public float 		yOffset = 2.5f; 
+	public Transform 	layoutAnchor; // the base of the game layout
 
 
 	// SCORE INFORMATION
@@ -66,6 +70,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		runMult = 1; // This is always 1 at the start of the game
 		
 	}
+	// a wrapper method created to avoid issues with static-nonstatic conflicts
 	public Card DrawCall(){
 		return Draw();}
 	
@@ -92,7 +97,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		}
 		
 	}
-
+	// a wrapper method created to avoid issues with static-nonstatic conflicts
 	public void DrawUpdate(){
 		UpdateDrawPile ();
 

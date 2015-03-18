@@ -1,4 +1,6 @@
-﻿// code from textbook prospector chapter recoded for this project
+﻿//----------------------------------------------------------------------------------------------------
+//As much of the game logic revolves around cards, the bulk of the code is contained in this class
+//----------------------------------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//--------------------------------------------------------
+// most, if not all of this class comes from prospector
+//--------------------------------------------------------
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -539,3 +542,5 @@ public class Easing {
 	}
 	
 }
+
+
