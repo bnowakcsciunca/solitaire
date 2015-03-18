@@ -13,9 +13,6 @@ public class ReloadDeck : MonoBehaviour {
 		x = Box.renderer.material;
 		 x = Box.renderer.material;
 		x.color = Color.white;
-
-
-			
 		}
 	// Update is called once per frame
 	void Update () {
@@ -54,6 +51,10 @@ public class ReloadDeck : MonoBehaviour {
 			}
 			Ultimate_Solitaire.S.DrawUpdate();  
 			count++;
+
+			// Decrease the score by 50% for going through the pile and update the score
+			Ultimate_Solitaire.S.score = Ultimate_Solitaire.S.score / 2;
+			Ultimate_Solitaire.S.UpdateScore ();
 		}
 		Tenabled = false;
 	}

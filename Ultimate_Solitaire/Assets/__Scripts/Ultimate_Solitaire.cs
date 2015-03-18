@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Ultimate_Solitaire : MonoBehaviour {
 	static public Ultimate_Solitaire S;
@@ -30,16 +31,21 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public Vector3[]	multiPos;		// multiPos contains a reference to the original positions of all multiMov cards
 
 	// LAYOUT INFORMATION
-	public 				Layout 		layout;
-	public 				TextAsset 	deckXML;
-	public 				TextAsset 	layoutXML;
-	public 				Vector3 	layoutCenter;
-	public 				float 		xOffset = 3;
-	public 				float 		yOffset = 2.5f;
-	public 				Transform 	layoutAnchor;   
+	public Layout 		layout;
+	public TextAsset 	deckXML;
+	public TextAsset 	layoutXML;
+	public Vector3 		layoutCenter;
+	public float 		xOffset = 3;
+	public float 		yOffset = 2.5f;
+	public Transform 	layoutAnchor;
+
+
+	// SCORE INFORMATION
+	public int			score;		// Stores the score
+	public int			runMult;	// Stores the multiplier that doubles the points added for each card moved to the foundation in a row
+	public Game_Screen	gScript;	// Direct reference to Game_Screen.cs in the holding object (set in the Inspector)
 
 	void Awake(){
-		
 		S = this;
 	}
 	
@@ -56,6 +62,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		drawPile = (deck.cards);
 		LayoutGame ();
 		//print(tableaus[1].Count);
+
+		runMult = 1; // This is always 1 at the start of the game
 		
 	}
 	public Card DrawCall(){
@@ -157,5 +165,9 @@ public class Ultimate_Solitaire : MonoBehaviour {
 			c.transform.position = multiPos[i];
 			c.SetSortingLayerName(multiLayers[i]);
 		}
+	}
+
+	public void UpdateScore() {
+		gScript.UpdateScore ();
 	}
 }

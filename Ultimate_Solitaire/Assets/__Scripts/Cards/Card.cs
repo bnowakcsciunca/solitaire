@@ -55,7 +55,6 @@ public class Card : MonoBehaviour {
 	public          		Color startcolor;
 	public          		Color highlight;
 
-
 	public bool faceUp{
 		get {
 			return (!back.activeSelf);
@@ -235,6 +234,11 @@ public class Card : MonoBehaviour {
 					fMove = true;
 					disableFon = true;// prevents multiple foundations from grabbing this card
 					//this.state = CardState.foundation;
+
+					// Update the score. Double the run multiplier. Then call UpdateScore() to update the UI
+					Ultimate_Solitaire.S.score += 1 * Ultimate_Solitaire.S.runMult;
+					Ultimate_Solitaire.S.runMult *= 2;
+					Ultimate_Solitaire.S.UpdateScore();
 				}
 			}
 		}
@@ -301,7 +305,6 @@ public class Card : MonoBehaviour {
 	}
 
 	void DrawCard() {
-		// Here I think we should check if the card has children and if so, move the entire pile
 		Card tem = Ultimate_Solitaire.S.DrawCall();// a temporary place to put the card that was drawn
 		Ultimate_Solitaire.S.discardPile.Add(tem);
 		tem.state = CardState.discard;
@@ -321,6 +324,9 @@ public class Card : MonoBehaviour {
 		drawn = true;
 		// Set the sorting layer to discard so that these things draw correctly
 		tem.SetSortingLayerName ("Discard");
+
+		// Reset the run multiplier since a new card was drawn
+		Ultimate_Solitaire.S.runMult = 1;
 	}
 
 	void FlipCard() {
@@ -361,6 +367,10 @@ public class Card : MonoBehaviour {
 				// SET THE LAYER. The row number is equal to the card's new place in the tableau
 				newSortingLayer = "Row" + (Ultimate_Solitaire.S.tableaus [tableaunumb].Count - 1);
 				print ("Moved card from discard with new sorting layer of " + newSortingLayer);
+
+				// Add some points and update the score
+				Ultimate_Solitaire.S.score += 3;
+				Ultimate_Solitaire.S.UpdateScore ();
 			}
 			// Move from tableau pile
 			else if (clickedcard.state == CardState.tableau && passThrough == false && Ultimate_Solitaire.S.multi == false) {
