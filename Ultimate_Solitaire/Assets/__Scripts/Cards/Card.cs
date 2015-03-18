@@ -240,6 +240,8 @@ public class Card : MonoBehaviour {
 		
 		// Move multiple cards
 		if (clickedcard.state == CardState.tableau && Ultimate_Solitaire.S.multi == true) {
+			valid = true; // Definitely a valid move
+
 			Ultimate_Solitaire.S.pos = otherCard.transform.position;
 			Ultimate_Solitaire.S.pos.z -= 1;
 			Ultimate_Solitaire.S.pos.y -= .5f;
@@ -506,7 +508,7 @@ public class Card : MonoBehaviour {
 		Ultimate_Solitaire.S.multi = false;
 
 		// *** PROBABLY DON'T WANT TO NULL THESE
-		// Ultimate_Solitaire.S.multiMov = null;
+		Ultimate_Solitaire.S.multiMov = null;
 		// Ultimate_Solitaire.S.multiPos = null;
 		// Ultimate_Solitaire.S.multiLayers = null;
 

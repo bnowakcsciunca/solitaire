@@ -86,7 +86,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 					mousePos3D.y -= 0.5f;
 					//mousePos3D.z -= 0.5f;
 					multiMov[i].transform.position = mousePos3D;
-					multiMov[i].SetSortOrder (4 * i);
+					multiMov[i].SetSortOrder (4 * i); // Each card is on the MovingCard sort layer so this should work
 				}
 			}
 		}
