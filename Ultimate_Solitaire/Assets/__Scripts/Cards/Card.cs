@@ -258,7 +258,7 @@ public class Card : MonoBehaviour {
 				clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
 				clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
 			}	
-			Vector3 tpos = Ultimate_Solitaire.S.pos; // a vector3 used to calculate the final position of all involved cards 
+			Vector3 tpos = Ultimate_Solitaire.S.tempCard.transform.position; // a vector3 used to calculate the final position of all involved cards 
 			Card[] x = Ultimate_Solitaire.S.multiMov; // an arrya used to track the cards involved in this move
 
 			// Get the sorting layer of the other card, and parse it.
@@ -281,6 +281,7 @@ public class Card : MonoBehaviour {
 				Ultimate_Solitaire.S.tableaus [tabl1].Remove (x[i]);
 				Ultimate_Solitaire.S.tableaus [tabl2].Add (x[i]); 
 				x[i].slotDef.TableauNum = tabl2;
+				x[i].transform.position = tpos;
 			}	
 		}
 		
@@ -490,6 +491,7 @@ public class Card : MonoBehaviour {
 			}
 			else if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == true && fMove == false){
 				print ("ResetMoveLogic() - MultiMov");
+
 			} else {
 				print ("The type of move just made is unknown. Something bad happened.");
 			}

@@ -85,7 +85,7 @@ public class Utils : MonoBehaviour {
 		Vector3 boundBRF = cam.ScreenToWorldPoint( bottomRight );
 		
 		// Adjust the z to be at the near and far Camera clipping planes
-		boundTLN.z += cam.nearClipPlane;
+		boundTLN.z += cam.nearClipPlane;   
 		boundBRF.z += cam.farClipPlane;
 		
 		// Find the center of the Bounds
