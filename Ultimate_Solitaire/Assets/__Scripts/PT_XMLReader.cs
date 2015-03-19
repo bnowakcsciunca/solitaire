@@ -1,3 +1,6 @@
+//------------------------------------------------------------------------
+// this comes from prospector, it is used to parse XML files
+//------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//-----------------------------------------------------------------------------------------
+// This script is for the main game logic (the stuff that doesn't deal diretly with cards)
+//-----------------------------------------------------------------------------------------
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -11,8 +14,8 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public List<Card> 	drawPile;
 	public List<Card> 	discardPile;
 	[SerializeField]
-	public List<Card>[] tableaus = new List<Card>[7];
-	public List<Card>[] foundations = new List<Card>[4];
+	public List<Card>[] tableaus = new List<Card>[7]; // a linked list containing all the tableau piles. the index is retrieved from Card.slotdef.tableaunum
+	public List<Card>[] foundations = new List<Card>[4]; // a linked list containing all the foundation piles. the index MUST come from Foundation.pileNum
 
 	// CARD REFERENCES
 	public Card  		clickedCard;	// the card being moved
@@ -176,5 +179,19 @@ public class Ultimate_Solitaire : MonoBehaviour {
 
 	public void UpdateScore() {
 		gScript.UpdateScore ();
+	}
+	// method for checking for win, put in update();
+	public void CheckWin(){
+		int fonCntr=0;
+		for (int i = 0; i<4; i++) {
+			if (foundations[i].Count == 13){
+				fonCntr++;
+			}
+			if (fonCntr == 4){
+				//Call win screen
+			}
+				
+		}
+
 	}
 }
