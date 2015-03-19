@@ -68,7 +68,7 @@ public class Card : MonoBehaviour {
 	}
 
 	void Start() {
-		startcolor = renderer.material.color;
+		startcolor = Color.white;
 	}
 
 	// OnMouseEnter() lets the Ultimate_Solitaire code know that a card is being hovered over
@@ -175,7 +175,10 @@ public class Card : MonoBehaviour {
 		}
 		if (colType == CollisionType.foundation) {
 			// print ("Trying MoveToFoundation()");
-			MoveToFoundation (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<Foundation> ());
+			// We don't want to break the game by moving multiple cards to the foundation
+			if (Ultimate_Solitaire.S.multi == false) {
+				MoveToFoundation (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<Foundation> ());
+			}
 			ResetMoveLogic ();
 			return;
 		}
