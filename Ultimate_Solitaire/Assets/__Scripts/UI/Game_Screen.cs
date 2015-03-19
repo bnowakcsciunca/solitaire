@@ -6,10 +6,14 @@ using System.Collections;
 public class Game_Screen : MonoBehaviour {
 
 	public GameObject			scoreT;
+	public GameObject			loseT;
 
 	void Awake() {
 		scoreT = GameObject.Find ("scoreText");
 		scoreT.GetComponent<Text>().text = "Score: 0";
+
+		loseT = GameObject.Find ("loseButton");
+		loseT.SetActive (false);
 	}
 
 	public void UpdateScore() {
@@ -26,5 +30,9 @@ public class Game_Screen : MonoBehaviour {
 
 	public void ExitButton() {
 		Application.Quit ();
+	}
+
+	public void MakeLoseButtonVisible() {
+		loseT.SetActive (true);
 	}
 }
