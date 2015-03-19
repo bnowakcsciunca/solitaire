@@ -1,9 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\Cards\ReloadDeck.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\Brendan\Documents\GitHub\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs">
     <Files>
+      <File FileName="Assets\__Scripts\Ultimate_Solitaire.cs" Line="1" Column="1" />
       <File FileName="Assets\__Scripts\UI\Game_Screen.cs" Line="36" Column="26" />
       <File FileName="Assets\__Scripts\Cards\ReloadDeck.cs" Line="59" Column="36" />
+      <File FileName="Assets\__Scripts\Layout.cs" Line="28" Column="202" />
+      <File FileName="c:\Users\Brendan\Documents\GitHub\solitaire\Ultimate_Solitaire\Assets\__Scripts\Utils.cs" Line="72" Column="47" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
