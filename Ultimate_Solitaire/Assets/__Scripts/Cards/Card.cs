@@ -302,12 +302,32 @@ public class Card : MonoBehaviour {
 			// print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count); 
 			
 		}
-		if (king.state == CardState.tableau) {
+		if (king.state == CardState.tableau && Ultimate_Solitaire.S.multi == false) {
 			int temp = king.slotDef.TableauNum;	
 			Ultimate_Solitaire.S.tableaus[temp].Remove(king);
 			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
 			king.slotDef.TableauNum = anc.pileID;
 			// print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count);
+		}
+		if (king.state == CardState.tableau && Ultimate_Solitaire.S.multi == true) {      
+			Vector3 tpos = anc.transform.position;
+			
+			tpos.z -=2;
+			Card[] mul = Ultimate_Solitaire.S.multiMov;
+			for (int i =0; i < mul.Length;i++){
+				mul[i].transform.position = tpos;
+				tpos.y -=.5f;
+				tpos.z -=1;
+				int oldTab = mul[i].slotDef.TableauNum;
+				mul[i].slotDef.TableauNum = anc.pileID;
+				print (mul[i].slotDef.TableauNum);
+				Ultimate_Solitaire.S.tableaus[oldTab].Remove(mul[i]);     
+				Ultimate_Solitaire.S.tableaus[anc.pileID].Add(mul[i]);
+
+
+			}
+
+		
 		}
 		// Set the King's sorting layer to be the bottom
 		newSortingLayer = "Row0";
