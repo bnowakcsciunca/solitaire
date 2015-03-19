@@ -10,6 +10,7 @@ public class ReloadDeck : MonoBehaviour {
 	Material x;  // the material attached to Box
 	bool Tenabled = false; // flag for telling if this is enabled
 	int count = 0; // counter for number of times the deck has been passed through
+	bool isRed = false;
 
 	public Game_Screen gScript;
 
@@ -26,6 +27,7 @@ public class ReloadDeck : MonoBehaviour {
 		if (count == 3) {
 			x.color = Color.red;
 			Tenabled = false;
+			isRed = true;
 		}
 
 		else if (Ultimate_Solitaire.S.drawPile.Count == 0 && count < 3) {
@@ -55,7 +57,7 @@ public class ReloadDeck : MonoBehaviour {
 			// Decrease the score by 50% for going through the pile and update the score
 			Ultimate_Solitaire.S.score = Ultimate_Solitaire.S.score / 2;
 			Ultimate_Solitaire.S.UpdateScore ();
-		} else {
+		} else if (isRed == true){
 			gScript.MakeLoseButtonVisible();
 		}
 		Tenabled = false;
