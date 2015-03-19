@@ -252,8 +252,8 @@ public class Card : MonoBehaviour {
 			if (tabl1 != tabl2){
 				
 				//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
-				Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
-				Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
+			//	Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
+			//	Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
 				
 				clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
 				clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
