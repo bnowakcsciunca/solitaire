@@ -52,12 +52,16 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	public int			runMult;	// Stores the multiplier that doubles the points added for each card moved to the foundation in a row
 	public Game_Screen	gScript;	// Direct reference to Game_Screen.cs in the holding object (set in the Inspector)
 
+	public bool			winning;	// False is lose, true is win
+
 	void Awake(){
 		S = this;
 	}
 	
 	// Use this for initialization
 	void Start () {
+		winning = false;
+
 		multiLayers = new string[13];
 		multiPos = new Vector3[13];
 

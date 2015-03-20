@@ -4,24 +4,35 @@ using UnityEngine.UI;
 
 public class End_Screen : MonoBehaviour {
 
-	public Text title;
-	public Text Score;
-	public Text HScore;
-	public Text congrats;
-	public bool _____________________________;
+	public Text 			title;
+	public Text 			Score;
+	public Text 			HScore;
+	public Text 			congrats;
+	public bool 			_____________________________;
 
-	int score;
-	int highscore;
-	GameObject winScreen;
-	GameObject loseScreen;
+	public GameObject		persistentStuff;
+
+	int 					score;
+	int 					highscore;
+	bool 					didIWin;
+	GameObject 				winScreen;
+	GameObject 				loseScreen;
 
 	// Use this for initialization
 	void Awake () {
 		highscore = PlayerPrefs.GetInt ("UltimateHighScore");
 
-		// Testing here
-		//WonGame ();
-		LostGame();
+		// Grab the persistent information
+		persistentStuff = GameObject.Find ("Persistence_Object");
+		PersistentInfo pScript = persistentStuff.GetComponent<PersistentInfo>();
+		score = pScript.score;
+
+		didIWin = pScript.wonGame;
+		if (didIWin == false) {
+			LostGame();
+		} else {
+			WonGame();
+		}
 	}
 
 	public void WonGame() {
@@ -32,6 +43,7 @@ public class End_Screen : MonoBehaviour {
 		if (score > highscore) {
 			congrats.text = "Congratulations, you beat the high score!";
 			highscore = score;
+			HScore.text = highscore.ToString ();
 			PlayerPrefs.SetInt ("UltimateHighScore", highscore);
 		}
 
@@ -45,6 +57,7 @@ public class End_Screen : MonoBehaviour {
 		if (score > highscore) {
 			congrats.text = "Congratulations, you beat the high score!";
 			highscore = score;
+			HScore.text = highscore.ToString ();
 			PlayerPrefs.SetInt ("UltimateHighScore", highscore);
 		}
 	}

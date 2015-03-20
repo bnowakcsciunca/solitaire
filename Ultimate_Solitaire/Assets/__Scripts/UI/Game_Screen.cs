@@ -35,4 +35,13 @@ public class Game_Screen : MonoBehaviour {
 	public void MakeLoseButtonVisible() {
 		loseT.SetActive (true);
 	}
+
+	public void TestWin() {
+		Ultimate_Solitaire.S.winning = true;
+		Application.LoadLevel ("4_EndScreen");
+	}
+
+	public void TestLose() {
+		Application.LoadLevel ("4_EndScreen");
+	}
 }
