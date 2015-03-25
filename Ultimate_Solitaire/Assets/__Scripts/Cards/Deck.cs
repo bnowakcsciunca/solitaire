@@ -7,33 +7,34 @@ using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
 	// suits
-	public Sprite suitClub;
-	public Sprite suitDiamond;
-	public Sprite suitHeart;
-	public Sprite suitSpade;
+	public Sprite 		suitClub;
+	public Sprite 		suitDiamond;
+	public Sprite 		suitHeart;
+	public Sprite 		suitSpade;
 
-	public Sprite[] faceSprites;
-	public Sprite[] rankSprites;
+	public Sprite[] 	faceSprites;
+	public Sprite[] 	rankSprites;
 
-	public Sprite cardBack;
-	public Sprite cardBackGold;
-	public Sprite cardFront;
-	public Sprite cardFrontGold;
+	public Sprite 		cardBack;
+	public Sprite 		cardBackGold;
+	public Sprite 		cardFront;
+	public Sprite 		cardFrontGold;
 
 	// prefabs
-	public GameObject prefabSprite;
-	public GameObject prefabCard;
+	public GameObject 	prefabSprite;
+	public GameObject 	prefabCard;
 
 
 
-	public bool ________________;
-	public PT_XMLReader xmlr;
-	public List<string> cardNames;
-	public List<Card>   cards;
-	public List<Decorator> decorators;
-	public List<CardDefinition> cardDefs;
-	public Transform deckAnchor;
-	public Dictionary<string,Sprite> dictSuits;
+	public bool 		________________;
+
+	public PT_XMLReader 		xmlr;
+	public List<string> 		cardNames;
+	public List<Card>   		cards;
+	public List<Decorator> 			decorators;
+	public List<CardDefinition> 	cardDefs;
+	public Transform 				deckAnchor;
+	public Dictionary<string,Sprite> 	dictSuits;
 
 	// init deck called by solitare when it is ready
 	public void InitDeck(string deckXMLText){

@@ -40,8 +40,6 @@ public class Card : MonoBehaviour {
 	bool 					disableFon = false;					// this prevents setting two foundations to the same suit
 
 	// TEMPORARY VARIABLES TO USE IN MOVE LOGIC
-	// public List<Card> 		hiddenBy = new List<Card>();
-	// public CardState		prevState = CardState.empty;		// Stores the previous state of the card when moved, so that it can be returned should the trigger no longer be called
 	bool 					drawn = false;						// Flag for clicking on the draw pile
 	bool 					valid = false;						// Flag for a valid move
 	bool 					fMove = false;						// Flag for a foundation move
@@ -68,61 +66,31 @@ public class Card : MonoBehaviour {
 	}
 
 	void Start() {
-		startcolor = Color.white;
+		startcolor = Color.white; // Just in case the card is hovered over when the game starts, it won't be yellow.
 	}
 
-	// OnMouseEnter() lets the Ultimate_Solitaire code know that a card is being hovered over
+	// OnMouseEnter() lets the Ultimate_Solitaire code know that a card is being hovered over. It highlights the card
+	// yellow.
 	void OnMouseEnter(){
 		if (this.state != CardState.drawpile && this.faceUp == true)
 			renderer.material.color = highlight;
 		Ultimate_Solitaire.S.hover = true;
 	}
 	
-	// OnMouseExit() lets the Ultimate_Solitaire code know that a card is no longer being hovered over
+	// OnMouseExit() lets the Ultimate_Solitaire code know that a card is no longer being hovered over. It
+	// returns the card to its original color.
 	void OnMouseExit(){
 		Ultimate_Solitaire.S.hover = false;
 		renderer.material.color = startcolor;
 	}
 
-	void OnTriggerEnter(Collider col){
-		if (col.tag == "Empty" && this.rank == 13) { 
-			if (col.GetComponent<TableauAnc> ().pactive == true) { 
-				colType = CollisionType.empty;
-				colTemp = col;
-				isColliding = true;
-				// print ("Colliding now with " + col + "; collision type is: " + colType);
-			}
-		} else if (col.name == "Foundation") {
-			colType = CollisionType.foundation;
-			colTemp = col;
-			isColliding = true;
-			// print ("Colliding now with " + col + "; collision type is: " + colType);
-		} else {
-			if (col.tag != "Empty" && col.GetComponent<Card>().faceUp == true) {
-				Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
-				if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
-					valid = Ultimate_Solitaire.S.CheckValid (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
-					if (valid == true) {
-						colType = CollisionType.tableau;
-						colTemp = col;
-						isColliding = true;
-						// print ("Colliding now with " + col + "; collision type is: " + colType);
-					}
-				}
-			}			
-		}
-	}
-
-	void OnTriggerExit(Collider col) {
-		if (colTemp == col) {
-			colTemp = null;
-			// isColliding = false;
-			colType = CollisionType.notColliding;
-		}
-	}
-
+	// ******************************************************************************************************
+	// -------------------------------------GENERAL MOVE LOGIC-----------------------------------------------
+	// ******************************************************************************************************
+	
 	// OnMouseDown() is called when this card is clicked. Depending on the state of the card, it will then call
-	// an appropriate helper method.
+	// an appropriate helper method that sets up the variables and conditions for
+	// the specific move type. This is the beginning of the move logic.
 	void OnMouseDown() {
 		bool flag=false;
 		// If this card is in a tableau pile
@@ -151,30 +119,66 @@ public class Card : MonoBehaviour {
 		}
 	}
 
+	// When this card moves over a collider, OnTriggerEnter() is called. We only care about specific collisions
+	// so col.tag will determine what happens next. Regardless, isColliding is set to true and a reference is created
+	// to that colliding object. The type is also saved.
+	void OnTriggerEnter(Collider col){
+		if (col.tag == "Empty" && this.rank == 13) { 
+			if (col.GetComponent<TableauAnc> ().pactive == true) { 
+				colType = CollisionType.empty;
+				colTemp = col;
+				isColliding = true;
+			}
+		} else if (col.name == "Foundation") {
+			colType = CollisionType.foundation;
+			colTemp = col;
+			isColliding = true;
+		} else {
+			if (col.tag != "Empty" && col.GetComponent<Card>().faceUp == true) {
+				Ultimate_Solitaire.S.tempCard = col.GetComponent<Card> ();
+				if (Ultimate_Solitaire.S.tempCard != Ultimate_Solitaire.S.clickedCard && Ultimate_Solitaire.S.tempCard.faceUp == true && this.faceUp == true && this == Ultimate_Solitaire.S.clickedCard) {
+					valid = Ultimate_Solitaire.S.CheckValid (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
+					if (valid == true) {
+						colType = CollisionType.tableau;
+						colTemp = col;
+						isColliding = true;
+					}
+				}
+			}			
+		}
+	}
+
+	// If the card leaves a triggering object, reset the reference to null and set the type to notColliding.
+	void OnTriggerExit(Collider col) {
+		if (colTemp == col) {
+			colTemp = null;
+			colType = CollisionType.notColliding;
+		}
+	}
+
+	// OnMouseUp() is simple in this case. If the card is colliding, it will call DoMoveLogic(). If it's not,
+	// it will call ResetMoveLogic().
 	void OnMouseUp() {
 		// If the card is colliding with a valid move, do the game logic
 		if (colTemp != null) {
-			// print ("Valid move");
 			DoMoveLogic();
 			colTemp = null;
 		} else {
-			// print ("Not a valid move; colTemp is " + colTemp);
 			// Reset all logic variables to false / null
 			ResetMoveLogic ();
 		}
 	}
 
-	// DoMoveLogic() does a specific card moving method depending on 
-	// the type of collision experienced by the card when mouse button is released
+	// DoMoveLogic() calls a specific card moving method depending on 
+	// the CollisionType of the colliding card / object. It then calls ResetMoveLogic() after that
+	// call finishes.
 	void DoMoveLogic(){
 		if (colType == CollisionType.empty) {
-			// print ("Trying MoveToEmpty()");
 			MoveToEmpty (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<TableauAnc> ());
 			ResetMoveLogic ();
 			return;
 		}
 		if (colType == CollisionType.foundation) {
-			// print ("Trying MoveToFoundation()");
 			// We don't want to break the game by moving multiple cards to the foundation
 			if (Ultimate_Solitaire.S.multi == false) {
 				MoveToFoundation (Ultimate_Solitaire.S.clickedCard, colTemp.GetComponent<Foundation> ());
@@ -184,15 +188,112 @@ public class Card : MonoBehaviour {
 		}
 		if (colType == CollisionType.tableau) {
 			Ultimate_Solitaire.S.tempCard = colTemp.GetComponent<Card> ();
-			// print ("Trying MoveCard()");
 			MoveCard (Ultimate_Solitaire.S.clickedCard, Ultimate_Solitaire.S.tempCard);
 			ResetMoveLogic ();
 			return;
 		}
 	}
 
+	void CreateTableauMove() {
+		Card[] x; // a temporary array to make this code shorter
+		prevSortingLayer = GetSortingLayerName ();
+		
+		int q = 0;//the index in the temporay array of the clicked card
+		int j = 0;// an index used to iterate through the array sans the clicked card
+		Ultimate_Solitaire.S.clicked = true;
+		Ultimate_Solitaire.S.clickedCard = this;
+		int tabl = this.slotDef.TableauNum;    // retains tableau number
+		x = Ultimate_Solitaire.S.tableaus[tabl].ToArray();
+		for (int i = 0;i<x.Length;i++){
+			if (x[i].name == this.name)
+				q = i;
+		}
+		
+		// If there are multiple cards beneath this one, set multi to true
+		if (q != x.Length-1 && x[q].faceUp==true){
+			Ultimate_Solitaire.S.multi = true;
+		}
+		
+		// Then, if multi is true add them to multiMov array
+		if (Ultimate_Solitaire.S.multi == true){
+			Ultimate_Solitaire.S.multiMov = new Card[x.Length-q];
+			for (int i = q ; i<x.Length; i++){
+				
+				// Grab the cards
+				Ultimate_Solitaire.S.multiMov[j] = x[i];
+				// Grab the original layers
+				Ultimate_Solitaire.S.multiLayers[j] = x[i].GetSortingLayerName ();
+				// Then grab the original position
+				Vector3 v = x[i].transform.position;
+				Ultimate_Solitaire.S.multiPos[j] = v; 
+				
+				// Put each on the "Moving" layer
+				Ultimate_Solitaire.S.multiMov[j].SetSortingLayerName ("MovingCard");
+				
+				j++; // j is used instead of i because it starts at 0, and i starts at q. It increments through the shrunken array
+				
+			}
+			
+		}
+		
+		// Change Layer to MovingCard, which is the highest sorting 
+		this.SetSortingLayerName("MovingCard");
+		
+		Ultimate_Solitaire.S.pos = this.transform.position;
+		x = null;
+	}
+	
+	void CreateDiscardMove() {
+		prevSortingLayer = GetSortingLayerName();
+		this.SetSortingLayerName("MovingCard");
+		
+		Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();// a temporary array for this move
+		Ultimate_Solitaire.S.tp = tem[tem.Length-1];
+		Ultimate_Solitaire.S.clicked = true;
+		Ultimate_Solitaire.S.clickedCard = Ultimate_Solitaire.S.tp;
+		if (Ultimate_Solitaire.S.pos == Vector3.zero)
+			Ultimate_Solitaire.S.pos = Ultimate_Solitaire.S.tp.transform.position;
+	}
+	
+	void DrawCard() {
+		Card tem = Ultimate_Solitaire.S.DrawCall();// a temporary place to put the card that was drawn
+		Ultimate_Solitaire.S.discardPile.Add(tem);
+		tem.state = CardState.discard;
+		tem.faceUp = true;
+		tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
+		// NEW VARIABLE
+		int discardSize = Ultimate_Solitaire.S.discardPile.Count; // the size of the discard pile
+		float staggerDist = 0f; // the stagger offset of the base of the pile, incremented for all other cards (this SHOULD BE ZERO here)
+		for (int i=0; i<discardSize; i++) {
+			staggerDist -= 0.05f;
+		}
+		tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
+		                                          Ultimate_Solitaire.S.layout.discardPile.y,
+		                                          staggerDist);
+		tem.SetSortOrder(4 * Ultimate_Solitaire.S.discardPile.Count);
+		drawn = true;
+		// Set the sorting layer to discard so that these things draw correctly
+		tem.SetSortingLayerName ("Discard");
+		
+		// Reset the run multiplier since a new card was drawn
+		Ultimate_Solitaire.S.runMult = 1;
+	}
+	
+	void FlipCard() {
+		Card[] x;// a temporary array
+		int tem = this.slotDef.TableauNum;// retains tableau number
+		x = Ultimate_Solitaire.S.tableaus[tem].ToArray();
+		for (int i = 0;i <x.Length;i++){
+			if (x[i].name == this.name&&i == x.Length-1){
+				this.faceUp=true;
+				
+			}
+		}
+		x = null;
+	}
+
 	// ******************************************************************************************************
-	// *************************************Specific Card Moving Methods*************************************
+	// -------------------------------------Specific Card Moving Methods-------------------------------------
 	// ******************************************************************************************************
 	void MoveCard(Card clickedcard, Card otherCard) {
 		
@@ -217,7 +318,6 @@ public class Card : MonoBehaviour {
 				
 				// SET THE LAYER. The row number is equal to the card's new place in the tableau
 				newSortingLayer = "Row" + (Ultimate_Solitaire.S.tableaus [tableaunumb].Count - 1);
-				// print ("Moved card from discard with new sorting layer of " + newSortingLayer);
 				
 				// Add some points and update the score
 				Ultimate_Solitaire.S.score += 3;
@@ -229,7 +329,6 @@ public class Card : MonoBehaviour {
 				int tabl2 = otherCard.slotDef.TableauNum; // retains the other card's tableau number
 				
 				if (tabl1 != tabl2){
-					// print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
 					Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
 					Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
 					clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
@@ -237,9 +336,7 @@ public class Card : MonoBehaviour {
 					
 					// SET THE LAYER. The row number is equal to the card's new place in the tableau
 					newSortingLayer = "Row" + (Ultimate_Solitaire.S.tableaus [clickedcard.slotDef.TableauNum].Count - 1);
-					// print ("Moved card from other tableau with new sorting layer of " + newSortingLayer);
 				}	
-				//print (Ultimate_Solitaire.S.tableaus [tabl2].Count); 
 			}
 		}
 		
@@ -253,11 +350,6 @@ public class Card : MonoBehaviour {
 			int tabl1 = clickedcard.slotDef.TableauNum; // retains clicked card's tableau number
 			int tabl2 = otherCard.slotDef.TableauNum;// retains the other card's tableau number
 			if (tabl1 != tabl2){
-				
-				//print (Ultimate_Solitaire.S.tableaus [tabl2].Count);
-			//	Ultimate_Solitaire.S.tableaus [tabl1].Remove (clickedcard);
-			//	Ultimate_Solitaire.S.tableaus [tabl2].Add (clickedcard); 
-				
 				clickedcard.slotDef.TableauNum = otherCard.slotDef.TableauNum;
 				clickedcard.SetSortOrder(Ultimate_Solitaire.S.tableaus[clickedcard.slotDef.TableauNum].Count);   
 			}	
@@ -267,20 +359,17 @@ public class Card : MonoBehaviour {
 			// Get the sorting layer of the other card, and parse it.
 			string otherLayer = otherCard.GetSortingLayerName();
 			string otherLayerNum = Regex.Replace (otherLayer, "[^0-9]", ""); // Use Regex.Replace to remove all non integer characters from the otherLayer
-			print (otherLayer + " " + otherLayerNum);
 			int oL = 0;
 			oL = int.Parse (otherLayerNum);
 			oL++;
 
 
 			// Place each card
-			print ("This should try to place each remaining card in the multiMov array correctly.");
 			for (int i = 0; i<x.Length;i++){
 				tpos.z -=1;
 				tpos.y -=.5f;
 
 				x[i].SetSortingLayerName ("Row" + (oL + i)); // Set the sorting layer name to be greater than otherCard
-				print ("Card " + i + " should be at " + x[i].GetSortingLayerName ());
 				Ultimate_Solitaire.S.tableaus [tabl1].Remove (x[i]);
 				Ultimate_Solitaire.S.tableaus [tabl2].Add (x[i]); 
 				x[i].slotDef.TableauNum = tabl2;
@@ -302,7 +391,6 @@ public class Card : MonoBehaviour {
 			king.state= CardState.tableau;
 			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
 			king.slotDef.TableauNum = anc.pileID;
-			// print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count); 
 			
 		}
 		if (king.state == CardState.tableau && Ultimate_Solitaire.S.multi == false) {
@@ -310,7 +398,6 @@ public class Card : MonoBehaviour {
 			Ultimate_Solitaire.S.tableaus[temp].Remove(king);
 			Ultimate_Solitaire.S.tableaus[anc.pileID].Add(king);
 			king.slotDef.TableauNum = anc.pileID;
-			// print ("new size " +  Ultimate_Solitaire.S.tableaus[anc.pileID].Count);
 		}
 		if (king.state == CardState.tableau && Ultimate_Solitaire.S.multi == true) {      
 			Vector3 tpos = anc.transform.position;
@@ -323,7 +410,6 @@ public class Card : MonoBehaviour {
 				tpos.z -=1;
 				int oldTab = mul[i].slotDef.TableauNum;
 				mul[i].slotDef.TableauNum = anc.pileID;
-				print (mul[i].slotDef.TableauNum);
 				Ultimate_Solitaire.S.tableaus[oldTab].Remove(mul[i]);     
 				Ultimate_Solitaire.S.tableaus[anc.pileID].Add(mul[i]);
 
@@ -356,7 +442,6 @@ public class Card : MonoBehaviour {
 					if (clickedC.state == CardState.discard)
 						Ultimate_Solitaire.S.discardPile.Remove (clickedC); 
 					Ultimate_Solitaire.S.foundations[fon.pileID].Add (clickedC);
-					// print (fon.pile.Count);
 					clickedC.SetSortOrder (100 * Ultimate_Solitaire.S.foundations[fon.pileID].Count);
 
 					fMove = true;
@@ -372,134 +457,21 @@ public class Card : MonoBehaviour {
 		}
 	}
 
-	void CreateTableauMove() {
-		Card[] x; // a temporary array to make this code shorter
-		prevSortingLayer = GetSortingLayerName ();
-
-		int q = 0;//the index in the temporay array of the clicked card
-		int j = 0;// an index used to iterate through the array sans the clicked card
-		Ultimate_Solitaire.S.clicked = true;
-		Ultimate_Solitaire.S.clickedCard = this;
-		int tabl = this.slotDef.TableauNum;    // retains tableau number
-		x = Ultimate_Solitaire.S.tableaus[tabl].ToArray();
-		for (int i = 0;i<x.Length;i++){
-			if (x[i].name == this.name)
-				q = i;
-		}
-		
-		// If there are multiple cards beneath this one, set multi to true
-		if (q != x.Length-1 && x[q].faceUp==true){
-			// print ("multi");
-			Ultimate_Solitaire.S.multi = true;
-		}
-		
-		// Then, if multi is true add them to multiMov array
-		if (Ultimate_Solitaire.S.multi == true){
-			Ultimate_Solitaire.S.multiMov = new Card[x.Length-q];
-			for (int i = q ; i<x.Length; i++){
-				
-				// Grab the cards
-				Ultimate_Solitaire.S.multiMov[j] = x[i];
-				// Grab the original layers
-				Ultimate_Solitaire.S.multiLayers[j] = x[i].GetSortingLayerName ();
-				print ("Card " + j + " sorting layer is " + Ultimate_Solitaire.S.multiLayers[j]);
-				// Then grab the original position
-				Vector3 v = x[i].transform.position;
-				Ultimate_Solitaire.S.multiPos[j] = v; 
-
-				// Put each on the "Moving" layer
-				Ultimate_Solitaire.S.multiMov[j].SetSortingLayerName ("MovingCard");
-
-				// Ultimate_Solitaire.S.multiMov[j].SetSortingLayerName ("MovingCard");
-				// Ultimate_Solitaire.S.multiMov[j].SetSortOrder (j);
-				j++; // J is used because it starts at 0, and i starts at q. It increments through the shrunken array
-				
-			}
-			
-		}
-
-		// Change Layer to MovingCard, which is the highest sorting 
-		this.SetSortingLayerName("MovingCard");
-
-		Ultimate_Solitaire.S.pos = this.transform.position;
-		x = null;
-	}
-
-	void CreateDiscardMove() {
-		prevSortingLayer = GetSortingLayerName();
-		this.SetSortingLayerName("MovingCard");
-		
-		Card[] tem = Ultimate_Solitaire.S.discardPile.ToArray();// a temporary array for this move
-		Ultimate_Solitaire.S.tp = tem[tem.Length-1];
-		Ultimate_Solitaire.S.clicked = true;
-		Ultimate_Solitaire.S.clickedCard = Ultimate_Solitaire.S.tp;
-		if (Ultimate_Solitaire.S.pos == Vector3.zero)
-			Ultimate_Solitaire.S.pos = Ultimate_Solitaire.S.tp.transform.position;
-	}
-
-	void DrawCard() {
-		Card tem = Ultimate_Solitaire.S.DrawCall();// a temporary place to put the card that was drawn
-		Ultimate_Solitaire.S.discardPile.Add(tem);
-		tem.state = CardState.discard;
-		tem.faceUp = true;
-		tem.transform.parent = Ultimate_Solitaire.S.layoutAnchor;
-		// NEW VARIABLE
-		int discardSize = Ultimate_Solitaire.S.discardPile.Count; // the size of the discard pile
-		float staggerDist = 0f; // the stagger offset of the base of the pile, incremented for all other cards (this SHOULD BE ZERO here)
-		// print (discardSize);
-		for (int i=0; i<discardSize; i++) {
-			staggerDist -= 0.05f;
-		}
-		tem.transform.localPosition = new Vector3(Ultimate_Solitaire.S.layout.discardPile.x,
-		                                          Ultimate_Solitaire.S.layout.discardPile.y,
-		                                          staggerDist);
-		tem.SetSortOrder(4 * Ultimate_Solitaire.S.discardPile.Count);
-		drawn = true;
-		// Set the sorting layer to discard so that these things draw correctly
-		tem.SetSortingLayerName ("Discard");
-
-		// Reset the run multiplier since a new card was drawn
-		Ultimate_Solitaire.S.runMult = 1;
-	}
-
-	void FlipCard() {
-		Card[] x;// a temporary array
-		//prevSortingLayer = GetSortingLayerName ();
-		int tem = this.slotDef.TableauNum;// retains tableau number
-		x = Ultimate_Solitaire.S.tableaus[tem].ToArray();
-		for (int i = 0;i <x.Length;i++){
-			if (x[i].name == this.name&&i == x.Length-1){
-				this.faceUp=true;
-				
-			}
-		}
-		x = null;
-	}
-
-	// ResetMoveLogic() should return all move variables to the conditions they exist in before a move is attempted (ie, the card is clicked)
+	// ResetMoveLogic() should return all move variables to the conditions they existed in
+	// before the card was clicked.
 	void ResetMoveLogic() {
 		// If the card clicked is NOT the DrawPile, then proceed
 		if (drawn == false) {
 			// If it's not a valid move, then there is no newSortingLayer. newSortingLayer = prevSortingLayer so that it will return to the correct position in the tableau
 			if (valid == false) {
 				// Return to original sorting layer
-				// print ("Going back to original place");
-				// print ("Previous sorting layer should be: " + prevSortingLayer);
-				// print ("Not a valid move.");
 				newSortingLayer = prevSortingLayer;
 				if (Ultimate_Solitaire.S.multi == true) {
 					Ultimate_Solitaire.S.MultiReset ();
-					/*this.SetSortingLayerName (newSortingLayer);
-					int temp = int.Parse (newSortingLayer);
-
-					for (int i = 0; i<Ultimate_Solitaire.S.multiMov.Length; i++) {
-						Ultimate_Solitaire.S.multiMov[i].SetSortingLayerName ("Row" + (temp+i));
-					}*/
 				}
 			}
 			if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == false&&fMove == false) {
 				this.transform.position = Ultimate_Solitaire.S.pos;
-				print("The new sorting layer should be " + newSortingLayer);
 				this.SetSortingLayerName (newSortingLayer); // newSortingLayer is created in MoveCard, this allows it to use the tableau num values easily
 			}
 			else if (this.state == CardState.discard && fMove == false){
@@ -513,8 +485,6 @@ public class Card : MonoBehaviour {
 
 			}
 			else if (this.state == CardState.tableau && Ultimate_Solitaire.S.multi == true && fMove == false){
-				print ("ResetMoveLogic() - MultiMov");
-
 			} else {
 				print ("The type of move just made is unknown. Something bad happened.");
 			}
@@ -533,9 +503,9 @@ public class Card : MonoBehaviour {
 
 		// Reset variables for multi-moving cards
 		Ultimate_Solitaire.S.multi = false;
+		Ultimate_Solitaire.S.multiMov = null;
 
 		// *** PROBABLY DON'T WANT TO NULL THESE
-		Ultimate_Solitaire.S.multiMov = null;
 		// Ultimate_Solitaire.S.multiPos = null;
 		// Ultimate_Solitaire.S.multiLayers = null;
 

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// This class defines an object that persists throughout scene changes. In this context it is used
+// to retain the score from the game scene to the end game scene.
 public class PersistentInfo : MonoBehaviour {
 	public bool			wonGame;
 	public int			score;

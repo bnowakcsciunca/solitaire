@@ -44,4 +44,9 @@ public class Game_Screen : MonoBehaviour {
 	public void TestLose() {
 		Application.LoadLevel ("4_EndScreen");
 	}
+
+	public void GiveUp() {
+		Ultimate_Solitaire.S.winning = false;
+		Application.LoadLevel ("4_EndScreen");
+	}
 }

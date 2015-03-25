@@ -1,5 +1,6 @@
 ﻿//-----------------------------------------------------------------------------------------
-// This script is for the main game logic (the stuff that doesn't deal diretly with cards)
+// This script contains the main game logic flow including data structures for cards, piles, and movement.
+// Most of the card functions are contained within the cards themselves.
 //-----------------------------------------------------------------------------------------
 using UnityEngine;
 using System.Collections;
@@ -10,9 +11,10 @@ public class Ultimate_Solitaire : MonoBehaviour {
 	static public Ultimate_Solitaire S;
 
 	// DECK REFERENCE AND PILE LISTS
-	public Deck deck;
+	public Deck 		deck;
 	public List<Card> 	drawPile;
 	public List<Card> 	discardPile;
+
 	[SerializeField]
 	public List<Card>[] tableaus = new List<Card>[7]; // a linked list containing all the tableau piles. the index is retrieved from Card.slotdef.tableaunum
 	public List<Card>[] foundations = new List<Card>[4]; // a linked list containing all the foundation piles. the index MUST come from Foundation.pileNum
@@ -72,18 +74,18 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		layout.ReadLayout (layoutXML.text);
 		drawPile = (deck.cards);
 		LayoutGame ();
-		//print(tableaus[1].Count);
 
 		runMult = 1; // This is always 1 at the start of the game
 		
 	}
+
 	// a wrapper method created to avoid issues with static-nonstatic conflicts
 	public Card DrawCall(){
 		return Draw();}
 	
 	// Update is called once per frame
 	void Update () {
-		//print (tableaus [0].Count);
+
 		// Move a card or stack of cards 
 		mousePos2D = Input.mousePosition;
 		mousePos3D = Camera.main.ScreenToWorldPoint (mousePos2D);
@@ -91,12 +93,11 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		if (clicked = true && clickedCard != null&& (clickedCard.state == CardState.tableau || clickedCard.state == CardState.discard ) && clickedCard.faceUp == true) {
 			clickedCard.transform.position = mousePos3D;
 
-			// New multi-moving code
+			// MULTI-MOVE CODE
 			// Check that both multi is true AND that a valid multiMov array exists
 			if (multi != false && multiMov != null) {
 				for (int i = 0; i<multiMov.Length; i++) {
 					mousePos3D.y -= 0.5f;
-					//mousePos3D.z -= 0.5f;
 					multiMov[i].transform.position = mousePos3D;
 					multiMov[i].SetSortOrder (4 * i); // Each card is on the MovingCard sort layer so this should work
 				}
@@ -104,11 +105,13 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		}
 		
 	}
+
 	// a wrapper method created to avoid issues with static-nonstatic conflicts
 	public void DrawUpdate(){
 		UpdateDrawPile ();
-
 	}
+
+	// UpdateDrawPile() updates the draw pile
 	void UpdateDrawPile(){
 		Card cd;
 		for (int i = 0; i<drawPile.Count; i++) { 
@@ -126,12 +129,16 @@ public class Ultimate_Solitaire : MonoBehaviour {
 
 		}
 	}
+
+	// Draw() draws the top card from the drawpile.
 	Card Draw(){
 		Card cd = drawPile [0];
 		drawPile.RemoveAt (0);
 		return(cd);
 	}
 
+	// CheckValid returns whether or not there is a valid move between this clicked card and the card it is
+	// colliding with.
 	public bool CheckValid(Card clicked, Card collided){
 		if (clicked.rank == collided.rank - 1 && clicked.colS != collided.colS) {
 			//print ("DERP");
@@ -142,6 +149,7 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		}
 	}
 
+	// LayoutGame() does the initial card layout.
 	void LayoutGame(){
 		if (layoutAnchor == null) {
 			GameObject tGO = new GameObject("_LayoutAnchor");
@@ -181,21 +189,30 @@ public class Ultimate_Solitaire : MonoBehaviour {
 		multiMov = null;
 	}
 
+	// UpdateScore() calls UpdateScore() in the script handling the game screen's UI. It updates the image based on
+	// the score variable stored here.
 	public void UpdateScore() {
 		gScript.UpdateScore ();
 	}
-	// method for checking for win, put in update();
+	
+	/**
+	// CheckWin() checks to see if the game has been won by checking each foundation pile for the bool full = true.
+	// If so, it sets the game's winning flag to true and loads the EndScreen.
 	public void CheckWin(){
-		int fonCntr=0;
-		for (int i = 0; i<4; i++) {
-			if (foundations[i].Count == 13){
-				fonCntr++;
-			}
-			if (fonCntr == 4){
-				//Call win screen
-			}
-				
+		bool won = true;
+		for (int i = 0; i < foundations.Length; i++) {
+			if (foundations[i] == false)
+				won = false;
+		}
+		if (won == true) {
+			winning = true;
+			Application.LoadLevel ("4_EndScreen");
 		}
 
-	}
+	} **/
+	/**
+    // CheckLose() checks to see if the game is lost by CheckingValidMoveRemains(). If lost, winning flag is set to false
+    // and the game loads the EndScreen.
+	public void CheckLose() {}
+	**/
 }
